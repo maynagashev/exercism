@@ -18,12 +18,11 @@ One for you, one for me.
 
 package twofer
 
-import "fmt"
-
 // Build string with specified name
 func ShareWith(name string) string {
 	if name == "" {
 		name = "you"
 	}
-	return fmt.Sprintf("One for %s, one for me.", name)
+	//return fmt.Sprintf("One for %s, one for me.", name) // 386 ns/op 3.575s
+	return "One for " + name + ", one for me." // actually faster 69.4 ns/op 1.701s
 }
