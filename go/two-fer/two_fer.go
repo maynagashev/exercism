@@ -1,5 +1,5 @@
 /*
-`Two-fer` or `2-fer` is short for two for one. One for you and one for me.
+Package `Two-fer` or `2-fer` is short for two for one. One for you and one for me.
 
 Given a name, return a string with the message:
 
@@ -18,7 +18,7 @@ One for you, one for me.
 
 package twofer
 
-// Build string with specified name
+// ShareWith builds string with specified name
 func ShareWith(name string) string {
 	if name == "" {
 		name = "you"
