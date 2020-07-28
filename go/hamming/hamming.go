@@ -18,14 +18,14 @@ import "github.com/pkg/errors"
 // Distance counting different symbols on the same positions in two equal length strings
 func Distance(a, b string) (int, error) {
 
-	distance := 0
+	runesA, runesB, distance := []rune(a), []rune(b), 0
 
-	if len(a) != len(b) {
+	if len(runesA) != len(runesB) {
 		return distance, errors.New("sequences is not equal in length")
 	}
 
-	for pos := range a {
-		if a[pos] != b[pos] {
+	for pos := range runesA {
+		if runesA[pos] != runesB[pos] {
 			distance++
 		}
 	}
