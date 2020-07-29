@@ -13,7 +13,7 @@ The Hamming Distance is useful for lots of things in science, not just biology, 
 */
 package hamming
 
-import "github.com/pkg/errors"
+import "errors"
 
 // Distance counting different symbols on the same positions in two equal length strings
 func Distance(a, b string) (int, error) {
@@ -21,7 +21,7 @@ func Distance(a, b string) (int, error) {
 	runesA, runesB, distance := []rune(a), []rune(b), 0
 
 	if len(runesA) != len(runesB) {
-		return distance, errors.New("sequences is not equal in length")
+		return 0, errors.New("sequences is not equal in length")
 	}
 
 	for pos := range runesA {
