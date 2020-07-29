@@ -1,5 +1,7 @@
 /*
-Given an age in seconds, calculate how old someone would be on:
+Package space contains method for calculating age on other planets.
+
+Calculate how old someone would be on:
 
    - Mercury: orbital period 0.2408467 Earth years
    - Venus: orbital period 0.61519726 Earth years
@@ -13,13 +15,15 @@ Given an age in seconds, calculate how old someone would be on:
 So if you were told someone were 1,000,000,000 seconds old, you should
 be able to say that they're 31.69 Earth-years old.
 */
-
 package space
 
+// Planet names type
 type Planet string
 
+// EarthYearInSeconds constant value
 const EarthYearInSeconds float64 = 31557600 // or 365.25 days
 
+// EarthYearsOn other planets mapping
 var EarthYearsOn = map[Planet]float64{
 	"Mercury": 0.2408467,
 	"Venus":   0.61519726,
@@ -31,7 +35,7 @@ var EarthYearsOn = map[Planet]float64{
 	"Neptune": 164.79132,
 }
 
-// Given an age in seconds, calculate how old someone would be on specified planet in planet-years
+// Age calculates how old someone would be on specified planet in planet-years based on Earth age in seconds
 func Age(seconds float64, planet Planet) float64 {
 	planetYearInSeconds := EarthYearsOn[planet] * EarthYearInSeconds
 	return seconds / planetYearInSeconds
