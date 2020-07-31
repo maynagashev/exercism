@@ -3,22 +3,30 @@ Package triangle contains functions for work with triangles.
 */
 package triangle
 
-// Notice KindFromSides() returns this type. Pick a suitable data type.
+import "math"
+
+// Kind is resulting type of triangles
 type Kind int
 
+/*
+NaT - not a triangle
+Equ - equilateral
+Iso - isosceles
+Sca - scalene
+*/
 const (
-	// Pick values for the following identifiers used by the test program.
-	NaT Kind = iota // not a triangle
-	Equ             // equilateral
-	Iso             // isosceles
-	Sca             // scalene
+	NaT Kind = iota
+	Equ
+	Iso
+	Sca
 )
 
 // KindFromSides determines if a triangle is equilateral, isosceles, or scalene.
 func KindFromSides(a, b, c float64) Kind {
-	sides := []float64 {a, b, c}
+
+	sides := []float64{a, b, c}
 	for _, side := range sides {
-		if side == 0 {
+		if side <= 0 || math.IsNaN(side) || math.IsInf(side, 0) {
 			return NaT
 		}
 	}
