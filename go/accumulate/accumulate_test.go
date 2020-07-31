@@ -28,7 +28,15 @@ var tests = []struct {
 
 func TestAccumulate(t *testing.T) {
 	for _, test := range tests {
+		original := make([]string, len(test.given))
+		copy(original, test.given) // makes a deep copy of the original slice
 		actual := Accumulate(test.given, test.converter)
+
+		// checks if the original slice has been altered in any way
+		if fmt.Sprintf("%q", test.given) != fmt.Sprintf("%q", original) {
+			t.Fatalf("Original slice altered: expected %q, actual %q", original, test.given)
+		}
+
 		if fmt.Sprintf("%q", actual) != fmt.Sprintf("%q", test.expected) {
 			t.Fatalf("Accumulate(%q, %q): expected %q, actual %q", test.given, test.description, test.expected, actual)
 		}

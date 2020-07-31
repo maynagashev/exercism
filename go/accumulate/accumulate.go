@@ -7,9 +7,9 @@ the input collection.
 package accumulate
 
 // Accumulate applies specified converter function to collections of string items
-func Accumulate(items []string, converter func(string) string) []string {
-	for pos, item := range items {
-		items[pos] = converter(item)
+func Accumulate(input []string, converter func(string) string) (output []string) {
+	for _, item := range input {
+		output = append(output, converter(item))
 	}
-	return items
+	return
 }
