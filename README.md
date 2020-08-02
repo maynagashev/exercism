@@ -8,5 +8,5 @@ Profile: https://exercism.io/profiles/maynagashev
 
 Format, lint, test & run benchmarks:
 ```shell script
-gofmt -d . && golint && go test -v  --bench . --benchmem
+gofmt -d . && go vet && golint && go test -v  --bench . --benchmem 
 ```

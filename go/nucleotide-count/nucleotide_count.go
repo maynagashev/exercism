@@ -1,4 +1,7 @@
-package main
+/*
+Package dna contains DNA type and method DNA.Counts for it
+*/
+package dna
 
 import "fmt"
 
@@ -8,10 +11,6 @@ type Histogram map[rune]uint32
 // DNA is a list of nucleotides.
 type DNA string
 
-func main() {
-	dna := DNA("AGXXACT")
-	fmt.Print(dna.Counts())
-}
 // Counts generates a histogram of valid nucleotides in the given DNA.
 // Returns an error if d contains an invalid nucleotide.
 func (dna DNA) Counts() (Histogram, error) {
