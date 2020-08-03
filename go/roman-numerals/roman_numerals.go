@@ -1,13 +1,11 @@
-package main
+/*
+Package romannumerals contains functions for work with Roman Numerals
+*/
+package romannumerals
 
 import (
 	"fmt"
 )
-
-func main() {
-	fmt.Println(2136)
-	fmt.Println(ToRomanNumeral(2136))
-}
 
 var (
 	units     = []string{"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"}
@@ -16,10 +14,10 @@ var (
 	thousands = []string{"", "M", "MM", "MMM"}
 )
 
+// ToRomanNumeral converts arabic number to roman numeral
 func ToRomanNumeral(n int) (string, error) {
 	if n < 1 || n > 3000 {
 		return "", fmt.Errorf("out of range: %v", n)
 	}
-	fmt.Println(float64(n)/1000, n%1000/100, n%100/10, n%10)
-	return thousands[n/1000] + "." + hundreds[n%1000/100] + "." + tens[n%100/10] + "." + units[n%10], nil
+	return thousands[n/1000] + hundreds[n%1000/100] + tens[n%100/10] + units[n%10], nil
 }
