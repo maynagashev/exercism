@@ -31,7 +31,7 @@ func scoreOf(c rune) int {
 // Score returns the scrabble score of the given word
 func Score(word string) (score int) {
 	for _, c := range strings.ToLower(word) {
-		score += scoreOf(rune(c))
+		score += scoreOf(c)
 	}
 	return
 }
