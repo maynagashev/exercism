@@ -24,8 +24,7 @@ const (
 // KindFromSides determines if a triangle is equilateral, isosceles, or scalene.
 func KindFromSides(a, b, c float64) Kind {
 
-	sides := []float64{a, b, c}
-	for _, side := range sides {
+	for _, side := range []float64{a, b, c} {
 		if side <= 0 || math.IsNaN(side) || math.IsInf(side, 0) {
 			return NaT
 		}
