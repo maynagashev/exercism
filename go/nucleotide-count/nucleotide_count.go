@@ -21,11 +21,10 @@ func (dna DNA) Counts() (Histogram, error) {
 		'T': 0,
 	}
 	for i, r := range dna {
-		if _, ok := h[r]; ok {
-			h[r]++
-		} else {
-			return h, fmt.Errorf("invalid nucleotide: %s on position: %d", string(r), i+1)
+		if _, ok := h[r]; !ok {
+			return h, fmt.Errorf("invalid nucleotide: %c on position: %d", r, i+1)
 		}
+		h[r]++
 	}
 
 	return h, nil
