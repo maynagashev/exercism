@@ -21,6 +21,6 @@ func SumOfSquares(n int) (sum int) {
 }
 
 // Difference calculates difference between the square of the sum and the sum of the squares of the first N natural numbers
-func Difference(n int) (dif int) {
+func Difference(n int) int {
 	return SquareOfSum(n) - SumOfSquares(n)
 }

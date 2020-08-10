@@ -11,12 +11,12 @@ func Proverb(rhyme []string) (result []string) {
 		return
 	}
 
-	// first processing sentences with multiple words
+	// first processing sentences with multiple words (all except the last)
 	for i := 0; i < len(rhyme)-1; i++ {
 		result = append(result, fmt.Sprintf("For want of a %s the %s was lost.", rhyme[i], rhyme[i+1]))
 	}
 
-	// processing last sentence if rhyme is not empty
+	// processing last sentence
 	result = append(result, fmt.Sprintf("And all for the want of a %s.", rhyme[0]))
 
 	return
