@@ -7,19 +7,27 @@ import (
 )
 
 func main() {
-	s := "  foo bar  baz   The Road _Not_ Taken Halley's Comet Complementary metal-oxide semiconductor Something - I made up from thin air"
-	s = strings.ReplaceAll(s, "-", "- ")
-	words := strings.Fields(s)
-	res := ""
+	fmt.Print(Abbreviate("    sdf sdfd.qwe qwe-12q"))
+}
 
+func isSplitRune(c rune) bool {
+	return !unicode.IsLetter(c) && c != '\''
+}
+
+// Abbreviate splits given string to words by whitespaces (defined by unicode.IsSpace) AND by hyphen,
+// then joins all first letters in words
+func Abbreviate(s string) (res string) {
+	words := strings.FieldsFunc(s, isSplitRune) // split string
+	fmt.Println(words)
 	for _, w := range words {
-		w = strings.TrimFunc(w, func(c rune) bool {
-			return !unicode.IsLetter(c)
-		})
-		if w!="" {
-			res += strings.ToUpper(string(w[0]))
+		r := []rune(w) // convert to runes for proper unicode handling
+		if len(r) > 0 {
+			res += string(r[0])
 		}
 	}
+	return strings.ToUpper(res)
+}
 
-	fmt.Printf("Fields are: %q \n %s", strings.Fields(s), res)
+func isNotLetter(c rune) bool {
+	return !unicode.IsLetter(c)
 }
