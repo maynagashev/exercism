@@ -2,32 +2,36 @@ package main
 
 import (
 	"fmt"
-	"strings"
-	"unicode"
 )
 
 func main() {
-	fmt.Print(Abbreviate("    sdf sdfd.qwe qwe-12q"))
+	Valid("2323 2005 7766 3554")
 }
 
-func isSplitRune(c rune) bool {
-	return !unicode.IsLetter(c) && c != '\''
-}
+func Valid(s string) bool {
+	// decode digits from string
+	var digits []int
+	//for _, r := range s {
+	//	if unicode.IsDigit(r) {
+	//		fmt.Printf("%T %+v\n", r-'0', r-'0')
+	//		digits = append(digits, int(r-'0'))
+	//	}
+	//}
 
-// Abbreviate splits given string to words by whitespaces (defined by unicode.IsSpace) AND by hyphen,
-// then joins all first letters in words
-func Abbreviate(s string) (res string) {
-	words := strings.FieldsFunc(s, isSplitRune) // split string
-	fmt.Println(words)
-	for _, w := range words {
-		r := []rune(w) // convert to runes for proper unicode handling
-		if len(r) > 0 {
-			res += string(r[0])
+	for i := len(s) - 1; i >= 0; i-- {
+		c := s[i]
+		switch {
+		case c == ' ':
+			continue
+		case c >= '0' && c <= '9':
+			digits = append(digits, int(c-'0'))
+		default:
+			fmt.Println(digits)
+			return false
 		}
 	}
-	return strings.ToUpper(res)
-}
 
-func isNotLetter(c rune) bool {
-	return !unicode.IsLetter(c)
+	//validate
+	fmt.Println(digits)
+	return true
 }
