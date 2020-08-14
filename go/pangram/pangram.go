@@ -1,14 +1,24 @@
+/*
+Package pangram contains functions for work with pangrams.
+
+A pangram (Greek: παν γράμμα, pan gramma, "every letter") is a sentence using every letter of the alphabet at least once. The best known English pangram is:
+The quick brown fox jumps over the lazy dog.
+
+The alphabet used consists of ASCII letters a to z, inclusive, and is case insensitive. Input will not contain non-ASCII symbols.
+*/
 package pangram
 
-// IsPangram determines if the given string contains every letter
+import (
+	"strings"
+)
+
+// IsPangram determines if a sentence is a pangram.
 func IsPangram(s string) bool {
-	var bs int32
-	for i := 0; i < len(s); i++ {
-		c := (s[i] & 0xdf) - 'A'
-		if c > 25 || c < 0 {
-			continue
+	s = strings.ToLower(s)
+	for i := byte('a'); i <= byte('z'); i++ {
+		if strings.IndexByte(s, i) == -1 {
+			return false
 		}
-		bs |= 1 << c
 	}
-	return bs == 0x3ffffff
+	return true
 }
