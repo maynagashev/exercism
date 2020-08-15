@@ -2,36 +2,23 @@ package main
 
 import (
 	"fmt"
+	"unicode"
 )
 
 func main() {
-	Valid("2323 2005 7766 3554")
+	IsPangram("Five quacking Zephyrs jolt my wax bed.")
 }
 
-func Valid(s string) bool {
-	// decode digits from string
-	var digits []int
-	//for _, r := range s {
-	//	if unicode.IsDigit(r) {
-	//		fmt.Printf("%T %+v\n", r-'0', r-'0')
-	//		digits = append(digits, int(r-'0'))
-	//	}
-	//}
-
-	for i := len(s) - 1; i >= 0; i-- {
-		c := s[i]
-		switch {
-		case c == ' ':
+// IsPangram determines if the given string contains every letter
+func IsPangram(s string) bool {
+	var bs int32
+	for i := 0; i < len(s); i++ {
+		fmt.Printf("%v %c %v %v %c %+v %T\n", unicode.ToUpper(rune(i)), s[i], s[i], 0xdf, s[i] & 0xdf, s[i] & 0xdf, (s[i] & 0xdf))
+		c := (s[i] & 0xdf) - 'A'
+		if c > 25 || c < 0 {
 			continue
-		case c >= '0' && c <= '9':
-			digits = append(digits, int(c-'0'))
-		default:
-			fmt.Println(digits)
-			return false
 		}
+		bs |= 1 << c
 	}
-
-	//validate
-	fmt.Println(digits)
-	return true
+	return bs == 0x3ffffff
 }
