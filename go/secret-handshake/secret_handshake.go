@@ -1,5 +1,5 @@
 /*
-Package secret # Secret Handshake
+Package secret handshake
 
 You and your fellow cohort of those in the "know" when it comes to
 binary decide to come up with a secret "handshake".
@@ -9,7 +9,6 @@ binary decide to come up with a secret "handshake".
 10 = double blink
 100 = close your eyes
 1000 = jump
-
 
 10000 = Reverse the order of the operations in the secret handshake.
 ```
@@ -26,36 +25,32 @@ Given the input 19, the function would return the array
 Notice that the addition of 16 (10000 in binary)
 has caused the array to be reversed.
 
+Benchmarks:
+BenchmarkHandshake-12             367724              3206 ns/op            1824 B/op         62 allocs/op
 */
-package main
+package secret
 
-import "fmt"
-
-var actions = map[uint]string{
-	1: "wink",
-	2: "double blink",
-	4: "close your eyes",
-	8: "jump",
-}
-
-func main() {
-	fmt.Printf("%#v", Handshake(19))
-}
-
+// Handshake converts decimal number to the appropriate sequence of events for a secret handshake.
 func Handshake(n uint) (res []string) {
-	fmt.Printf("%08b %v\n ", n, n&16)
-	for i, action := range actions {
-		fmt.Println(i, action, n&i)
-		if n&i == i {
-			res = append(res, action)
-		}
+
+	if n&1 > 0 {
+		res = append(res, "wink")
+	}
+	if n&2 > 0 {
+		res = append(res, "double blink")
+	}
+	if n&4 > 0 {
+		res = append(res, "close your eyes")
+	}
+	if n&8 > 0 {
+		res = append(res, "jump")
 	}
 
+	// reverse handshake
 	if n&16 == 16 {
 		for i, j := 0, len(res)-1; i < j; i, j = i+1, j-1 {
 			res[i], res[j] = res[j], res[i]
 		}
 	}
 	return res
-
 }
