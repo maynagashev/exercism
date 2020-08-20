@@ -26,24 +26,41 @@ Notice that the addition of 16 (10000 in binary)
 has caused the array to be reversed.
 
 Benchmarks:
+
+Append to new slice
 BenchmarkHandshake-12             367724              3206 ns/op            1824 B/op         62 allocs/op
+
+Remove from filled slice
+BenchmarkHandshake-12             703927              1709 ns/op            2048 B/op         32 allocs/op
+
+
 */
 package secret
 
 // Handshake converts decimal number to the appropriate sequence of events for a secret handshake.
-func Handshake(n uint) (res []string) {
+func Handshake(n uint) []string {
+	var res = []string{
+		"wink",
+		"double blink",
+		"close your eyes",
+		"jump",
+	}
+	var shift uint8 = 0
 
-	if n&1 > 0 {
-		res = append(res, "wink")
+	if n&1 == 0 {
+		res = remove(res, 0)
+		shift++
 	}
-	if n&2 > 0 {
-		res = append(res, "double blink")
+	if n&2 == 0 {
+		res = remove(res, 1-shift)
+		shift++
 	}
-	if n&4 > 0 {
-		res = append(res, "close your eyes")
+	if n&4 == 0 {
+		res = remove(res, 2-shift)
+		shift++
 	}
-	if n&8 > 0 {
-		res = append(res, "jump")
+	if n&8 == 0 {
+		res = remove(res, 3-shift)
 	}
 
 	// reverse handshake
@@ -53,4 +70,9 @@ func Handshake(n uint) (res []string) {
 		}
 	}
 	return res
+}
+
+// remove removes item from slice by index
+func remove(slice []string, i uint8) []string {
+	return append(slice[:i], slice[i+1:]...)
 }
