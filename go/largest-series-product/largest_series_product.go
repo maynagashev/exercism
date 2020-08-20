@@ -16,11 +16,12 @@ the largest product for a series of 6 digits is 23520.
 
 Benchmarks:
 
-strconv.Atoi(string(byte))
+1. strconv.Atoi(string(byte))
 BenchmarkLargestSeriesProduct-12          360379              3270 ns/op              64 B/op          4 allocs/op
 
-hacking with digit bytes (s[i+j] - '0')
+2. hacking with digit bytes (b - '0')
 BenchmarkLargestSeriesProduct-12         2005789               616 ns/op              64 B/op          4 allocs/op
+
 */
 package lsproduct
 
@@ -29,20 +30,21 @@ import (
 )
 
 //LargestSeriesProduct calculates the largest product for a contiguous substring of digits of length n.
-func LargestSeriesProduct(s string, span int) (product int64, err error) {
+func LargestSeriesProduct(s string, span int) (maxP int64, err error) {
 	if span > len(s) || span < 0 {
 		return 0, errors.New("span is out of bounds")
 	}
-	for i := 0; i < len(s)-span+1; i++ {
-		p := int64(1)
+	for i := 0; i <= len(s)-span; i++ {
+		p := int64(1) // reset current product
 		for j := 0; j < span; j++ {
-			if s[i+j] < '0' || s[i+j] > '9' {
-				return 0, errors.New("invalid symbol in string")
+			b := s[i+j]
+			if b < '0' || b > '9' {
+				return 0, errors.New("invalid symbol in input string")
 			}
-			p *= int64(s[i+j] - '0')
+			p *= int64(b - '0')
 		}
-		if p > product {
-			product = p
+		if p > maxP {
+			maxP = p
 		}
 	}
 	return
