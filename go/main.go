@@ -1,52 +1,65 @@
 /*
-Package lsproduct (Largest Series Product)
+Package anagram
 
-Given a string of digits, calculate the largest product for a contiguous
-substring of digits of length n.
-
-For example, for the input `'1027839564'`, the largest product for a
-series of 3 digits is 270 (9 * 5 * 6), and the largest product for a
-series of 5 digits is 7560 (7 * 8 * 3 * 9 * 5).
-
-Note that these series are only required to occupy *adjacent positions*
-in the input; the digits need not be *numerically consecutive*.
-
-For the input `'73167176531330624919225119674426574742355349194934'`,
-the largest product for a series of 6 digits is 23520.
-
-Benchmarks:
-
-
+An anagram is a rearrangement of letters to form a new word.
+Given a word and a list of candidates, select the sublist of anagrams of the given word.
 */
 package main
 
 import (
 	"fmt"
-	"errors"
+	"strings"
 )
 
 func main() {
-	LargestSeriesProduct("(0123456789", 2)
-}
 
-//LargestSeriesProduct calculates the largest product for a contiguous substring of digits of length n.
-func LargestSeriesProduct(s string, span int) (product int64, err error) {
-	if span > len(s) || span < 0 {
-		return 0, errors.New("span is out of bounds")
-	}
-	for i, p := 0, int64(1); i < len(s)-span+1; i++ {
-		fmt.Println(p)
-		for j := 0; j < span; j++ {
-			fmt.Println(i, j, s[i+j])
-			if s[i+j] < '0' || s[i+j] > '9' {
-				return 0, errors.New("invalid symbol in string")
-			}
-			p *= int64(s[i+j] - '0')
-		}
-		if p > product {
-			product = p
+	Detect("allergy", []string{
+		"gallery",
+		"ballerina",
+		"regally",
+		"clergy",
+		"largely",
+		"leading"})
+}
+// Detect selects the sublist of anagrams of the given word
+func Detect(word string, candidates []string) (sublist []string) {
+	for _, cWord := range candidates {
+		if isAnagram(word, cWord) {
+			sublist = append(sublist, cWord)
 		}
 	}
+
 	return
 }
 
+func isAnagram(word string, word2 string) bool {
+	word, word2 = strings.ToLower(word), strings.ToLower(word2)
+
+	// check: !same word && have same len
+	if word == word2 || len(word) != len(word2) {
+		return false
+	}
+
+	usedI2 := map[int]bool{}
+	fmt.Println(word, word2)
+	// searching runes of the first word in a second word
+	for _, r1 := range word {
+		fmt.Println(r1, string(r1))
+		r1Found := false
+		// scanning runes of second word
+		for i2, r2 := range word2 {
+			fmt.Println("\t r2:", r2, string(r2), usedI2)
+			_, isUsed := usedI2[i2]
+			if r1 == r2 && !isUsed {
+				r1Found = true
+				usedI2[i2] = true
+				break;
+			}
+		}
+		if !r1Found {
+			return false
+		}
+	}
+
+	return true
+}
