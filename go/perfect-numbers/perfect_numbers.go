@@ -1,5 +1,14 @@
 /*
 Package perfect contains classification functions for natural numbers.
+
+Benchmarks:
+1. Not optimized aliquotSum
+BenchmarkClassify
+BenchmarkClassify-12                   2         713268213 ns/op               4 B/op          0 allocs/op
+
+2. Optimized aliquotSum
+BenchmarkClassify
+BenchmarkClassify-12                9475            126192 ns/op               0 B/op          0 allocs/op
 */
 package perfect
 
@@ -32,10 +41,10 @@ func Classify(n int64) (class Classification, err error) {
 
 	// classify
 	switch {
+	case alq < n || n == 1:
+		return ClassificationDeficient, nil
 	case alq == n:
 		return ClassificationPerfect, nil
-	case alq < n:
-		return ClassificationDeficient, nil
 	case alq > n:
 		return ClassificationAbundant, nil
 	}
@@ -44,9 +53,13 @@ func Classify(n int64) (class Classification, err error) {
 }
 
 func aliquotSum(n int64) (sum int64) {
-	for i := int64(1); i < n; i++ {
+	sum = 1
+	for i := int64(2); i*i <= n; i++ {
 		if n%i == 0 {
 			sum += i
+			if n/i != i {
+				sum += n / i
+			}
 		}
 	}
 	return
