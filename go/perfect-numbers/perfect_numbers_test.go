@@ -2,8 +2,6 @@ package perfect
 
 import "testing"
 
-
-
 var _ error = ErrOnlyPositive
 
 func TestGivesPositiveRequiredError(t *testing.T) {
@@ -12,7 +10,6 @@ func TestGivesPositiveRequiredError(t *testing.T) {
 	}
 	t.Logf("PASS GivesPositiveRequiredError")
 }
-
 
 func TestClassifiesCorrectly(t *testing.T) {
 	for _, c := range classificationTestCases {
