@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"sort"
 )
 
 var m = map[int]string{
@@ -46,23 +45,6 @@ var listTests = []struct {
 
 func main() {
 
-	fmt.Printf("%+q", sortedSubstances(m2))
+	fmt.Printf("%T %+v", listTests[100], listTests[100])
 
-}
-
-func sortedSubstances(m map[string]uint) []string {
-	mapByScore := make(map[uint]string)
-	scores := make([]int, 0, len(m))
-	substances := make([]string, 0, len(m))
-
-	for name, score := range m {
-		mapByScore[score] = name
-		scores = append(scores, int(score))
-	}
-	sort.Ints(scores)
-
-	for _, score := range scores {
-		substances = append(substances, mapByScore[uint(score)])
-	}
-	return substances
 }
