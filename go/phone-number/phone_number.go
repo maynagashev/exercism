@@ -2,7 +2,15 @@
 Package phonenumber contains functions for handle phone numbers.
 
 Benchmarks:
-1. onlyDigitsMap
+1. onlyDigitsRegexp
+BenchmarkNumber
+BenchmarkNumber-12                 78864             13950 ns/op            1466 B/op         97 allocs/op
+BenchmarkAreaCode
+BenchmarkAreaCode-12               87020             13914 ns/op            1468 B/op         97 allocs/op
+BenchmarkFormat
+BenchmarkFormat-12                 63368             19038 ns/op            2639 B/op        169 allocs/op
+
+2. onlyDigitsMap
 BenchmarkNumber
 BenchmarkNumber-12                635520              1935 ns/op             608 B/op         27 allocs/op
 BenchmarkAreaCode
@@ -10,7 +18,7 @@ BenchmarkAreaCode-12              608353              1889 ns/op             608
 BenchmarkFormat
 BenchmarkFormat-12                200294              5922 ns/op            1760 B/op         99 allocs/op
 
-2. onlyDigitsFor & builder
+3. onlyDigitsFor & builder
 BenchmarkNumber
 BenchmarkNumber-12                958804              1248 ns/op             528 B/op         31 allocs/op
 BenchmarkAreaCode
@@ -23,13 +31,14 @@ package phonenumber
 import (
 	"errors"
 	"fmt"
+	"regexp"
 	"strings"
 )
 
 // Number extracts number from input
 func Number(input string) (res string, err error) {
 	// clean up
-	digits := onlyDigitsMap(input)
+	digits := onlyDigitsFor(input)
 
 	// special case
 	if len(digits) == 11 && digits[0] == '1' {
@@ -49,15 +58,16 @@ func Number(input string) (res string, err error) {
 	return digits, nil
 }
 
-func onlyDigitsMap(input string) string {
-	return strings.Map(func(r rune) rune {
-		switch {
-		case r >= '0' && r <= '9':
-			return r
-		default:
-			return -1
-		}
-	}, input)
+// AreaCode extracts area code from input
+func AreaCode(number string) (res string, err error) {
+	num, err := Number(number)
+	return num[:3], err
+}
+
+// Format formats phone number
+func Format(number string) (res string, err error) {
+	num, err := Number(number)
+	return fmt.Sprintf("(%s) %s-%s", num[:3], num[3:6], num[6:]), err
 }
 
 func onlyDigitsFor(input string) string {
@@ -72,14 +82,18 @@ func onlyDigitsFor(input string) string {
 	return b.String()
 }
 
-// AreaCode extracts area code from input
-func AreaCode(number string) (res string, err error) {
-	num, err := Number(number)
-	return num[:3], err
+func onlyDigitsMap(input string) string {
+	return strings.Map(func(r rune) rune {
+		switch {
+		case r >= '0' && r <= '9':
+			return r
+		default:
+			return -1
+		}
+	}, input)
 }
 
-// Format formats phone number
-func Format(number string) (res string, err error) {
-	num, err := Number(number)
-	return fmt.Sprintf("(%s) %s-%s", num[:3], num[3:6], num[6:]), err
+var notDigits = regexp.MustCompile(`[^\d]`)
+func onlyDigitsRegexp(input string) string {
+	return string(notDigits.ReplaceAll([]byte(input), []byte("")))
 }
