@@ -24,6 +24,7 @@ BenchmarkSieve-12         522270              2299 ns/op            4432 B/op   
 BenchmarkSieve
 BenchmarkSieve-12         696003              1707 ns/op            4432 B/op         10 allocs/op
 
+Tags: prime
 */
 package sieve
 
