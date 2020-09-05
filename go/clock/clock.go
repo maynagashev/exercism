@@ -34,6 +34,14 @@ BenchmarkSubtractMinutes
 BenchmarkSubtractMinutes-12     100000000               10.1 ns/op             0 B/op          0 allocs/op
 BenchmarkCreateClocks
 BenchmarkCreateClocks-12        100000000               10.5 ns/op             0 B/op          0 allocs/op
+
+5. Removed getters
+BenchmarkAddMinutes
+BenchmarkAddMinutes-12          119078599               10.3 ns/op             0 B/op          0 allocs/op
+BenchmarkSubtractMinutes
+BenchmarkSubtractMinutes-12     149693394                8.95 ns/op            0 B/op          0 allocs/op
+BenchmarkCreateClocks
+BenchmarkCreateClocks-12        227830412                5.31 ns/op            0 B/op          0 allocs/op
 */
 package clock
 
@@ -41,7 +49,7 @@ import "fmt"
 
 // Clock type
 type Clock struct {
-	m int
+	min int
 }
 
 const minutesInDay = 24 * 60
@@ -54,29 +62,19 @@ func New(h int, m int) Clock {
 
 // String converts Clock to a formatted string
 func (c Clock) String() string {
-	return fmt.Sprintf("%02d:%02d", c.Hours(), c.Minutes())
+	return fmt.Sprintf("%02d:%02d", c.min/60, c.min%60)
 }
 
 // Add minutes to given Clock instance
 func (c Clock) Add(m int) Clock {
-	c.m = normalizeMinutes(c.m + m)
+	c.min = normalizeMinutes(c.min + m)
 	return c
 }
 
 // Subtract minutes from given Clock instance
 func (c Clock) Subtract(m int) Clock {
-	c.m = normalizeMinutes(c.m - m)
+	c.min = normalizeMinutes(c.min - m)
 	return c
-}
-
-// Hours getter
-func (c Clock) Hours() int {
-	return c.m / 60
-}
-
-// Minutes getter
-func (c Clock) Minutes() int {
-	return c.m % 60
 }
 
 // normalizeMinutes keeps minutes value within minutesInDay range
