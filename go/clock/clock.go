@@ -42,6 +42,14 @@ BenchmarkSubtractMinutes
 BenchmarkSubtractMinutes-12     149693394                8.95 ns/op            0 B/op          0 allocs/op
 BenchmarkCreateClocks
 BenchmarkCreateClocks-12        227830412                5.31 ns/op            0 B/op          0 allocs/op
+
+6. Removed normalizeMinutes function and named constant
+BenchmarkAddMinutes
+BenchmarkAddMinutes-12          96593484                10.4 ns/op             0 B/op          0 allocs/op
+BenchmarkSubtractMinutes
+BenchmarkSubtractMinutes-12     141532027                9.21 ns/op            0 B/op          0 allocs/op
+BenchmarkCreateClocks
+BenchmarkCreateClocks-12        224030209                5.35 ns/op            0 B/op          0 allocs/op
 */
 package clock
 
@@ -49,39 +57,30 @@ import "fmt"
 
 // Clock type
 type Clock struct {
-	min int
+	minutes int
 }
 
-const minutesInDay = 24 * 60
-
-// New creates new Clock structure from arbitrary integer values.
+// New creates new Clock structure from arbitrary integer values of hours and minutes.
 // Can handle negative values and roll overs.
 func New(h int, m int) Clock {
-	return Clock{normalizeMinutes(h*60 + m)}
+	minutes := (h*60 + m) % (24 * 60)
+	if minutes < 0 {
+		minutes += 24 * 60
+	}
+	return Clock{minutes}
 }
 
 // String converts Clock to a formatted string
 func (c Clock) String() string {
-	return fmt.Sprintf("%02d:%02d", c.min/60, c.min%60)
+	return fmt.Sprintf("%02d:%02d", c.minutes/60, c.minutes%60)
 }
 
 // Add minutes to given Clock instance
 func (c Clock) Add(m int) Clock {
-	c.min = normalizeMinutes(c.min + m)
-	return c
+	return New(0, c.minutes+m)
 }
 
 // Subtract minutes from given Clock instance
 func (c Clock) Subtract(m int) Clock {
-	c.min = normalizeMinutes(c.min - m)
-	return c
-}
-
-// normalizeMinutes keeps minutes value within minutesInDay range
-func normalizeMinutes(minutes int) int {
-	resMinutes := minutes % minutesInDay
-	if resMinutes < 0 {
-		resMinutes += minutesInDay
-	}
-	return resMinutes
+	return New(0, c.minutes-m)
 }

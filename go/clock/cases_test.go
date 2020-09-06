@@ -42,7 +42,7 @@ var addTests = []struct {
 	{10, 0, 61, "11:01"},   // add more than one hour
 	{0, 45, 160, "03:25"},  // add more than two hours with carry
 	{23, 59, 2, "00:01"},   // add across midnight
-	{5, 32, 1500, "06:32"}, // add more than one day (1500 min = 25 hrs)
+	{5, 32, 1500, "06:32"}, // add more than one day (1500 minutes = 25 hrs)
 	{1, 1, 3500, "11:21"},  // add more than two days
 }
 
@@ -57,7 +57,7 @@ var subtractTests = []struct {
 	{0, 3, 4, "23:59"},     // subtract across midnight
 	{0, 0, 160, "21:20"},   // subtract more than two hours
 	{6, 15, 160, "03:35"},  // subtract more than two hours with borrow
-	{5, 32, 1500, "04:32"}, // subtract more than one day (1500 min = 25 hrs)
+	{5, 32, 1500, "04:32"}, // subtract more than one day (1500 minutes = 25 hrs)
 	{2, 20, 3000, "00:20"}, // subtract more than two days
 }
 
