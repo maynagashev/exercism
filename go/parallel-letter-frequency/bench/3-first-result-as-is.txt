@@ -6,8 +6,8 @@ goos: darwin
 goarch: amd64
 pkg: letter
 BenchmarkSequentialFrequency
-BenchmarkSequentialFrequency-12    	   55600	     20528 ns/op	    2995 B/op	      13 allocs/op
+BenchmarkSequentialFrequency-12    	   56594	     20542 ns/op	    2995 B/op	      13 allocs/op
 BenchmarkConcurrentFrequency
-BenchmarkConcurrentFrequency-12    	   58023	     20759 ns/op	    8133 B/op	      45 allocs/op
+BenchmarkConcurrentFrequency-12    	   65593	     18132 ns/op	    6149 B/op	      34 allocs/op
 PASS
-ok  	letter	3.196s
+ok  	letter	3.050s
