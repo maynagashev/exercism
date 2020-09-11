@@ -1,0 +1,29 @@
+=== RUN   TestCaesarPrepped
+--- PASS: TestCaesarPrepped (0.00s)
+=== RUN   TestCaesar
+--- PASS: TestCaesar (0.00s)
+=== RUN   TestShift
+--- PASS: TestShift (0.00s)
+=== RUN   TestVigenere
+--- PASS: TestVigenere (0.00s)
+goos: darwin
+goarch: amd64
+pkg: cipher
+BenchmarkEncodeCaesar
+BenchmarkEncodeCaesar-12    	 1250746	       963 ns/op	     208 B/op	      14 allocs/op
+BenchmarkDecodeCaesar
+BenchmarkDecodeCaesar-12    	 1282454	       931 ns/op	     208 B/op	      14 allocs/op
+BenchmarkNewShift
+BenchmarkNewShift-12        	  782977	      1503 ns/op	     800 B/op	      50 allocs/op
+BenchmarkEncodeShift
+BenchmarkEncodeShift-12     	  621278	      1999 ns/op	     528 B/op	      27 allocs/op
+BenchmarkDecodeShift
+BenchmarkDecodeShift-12     	  648747	      1868 ns/op	     528 B/op	      27 allocs/op
+BenchmarkNewVigenere
+BenchmarkNewVigenere-12     	 5664456	       212 ns/op	      80 B/op	       5 allocs/op
+BenchmarkEncVigenere
+BenchmarkEncVigenere-12     	 1817316	       664 ns/op	     128 B/op	      11 allocs/op
+BenchmarkDecVigenere
+BenchmarkDecVigenere-12     	 1923901	       622 ns/op	     128 B/op	      11 allocs/op
+PASS
+ok  	cipher	13.827s
