@@ -15,15 +15,25 @@ type Cipher interface {
 	Decode(string) string
 }
 
-// cipher struct with encoding maps
-type cipher struct {
+// caesarCipher struct with encoding maps
+type caesarCipher struct {
 	encodeMap map[rune]rune
 	decodeMap map[rune]rune
 }
 
+// Encode converts given string using caesarCipher.encodeMap.
+func (c caesarCipher) Encode(s string) string {
+	return c.convert(s, c.encodeMap)
+}
+
+// Encode converts given string using caesarCipher.decodeMap.
+func (c caesarCipher) Decode(s string) string {
+	return c.convert(s, c.decodeMap)
+}
+
 // convert converts given string using given conversion map
 // runes not presented in map - will be just excluded from the results
-func (c cipher) convert(s string, conversionMap map[rune]rune) string {
+func (c caesarCipher) convert(s string, conversionMap map[rune]rune) string {
 	b := strings.Builder{}
 	for _, r := range s {
 		if converted, ok := conversionMap[unicode.ToLower(r)]; ok {
@@ -33,16 +43,6 @@ func (c cipher) convert(s string, conversionMap map[rune]rune) string {
 	return b.String()
 }
 
-// Encode converts given string using cipher.encodeMap.
-func (c cipher) Encode(s string) string {
-	return c.convert(s, c.encodeMap)
-}
-
-// Encode converts given string using cipher.decodeMap.
-func (c cipher) Decode(s string) string {
-	return c.convert(s, c.decodeMap)
-}
-
 // NewCaesar generates conversion maps for simple caesar cipher with shift=3.
 func NewCaesar() Cipher {
 	return NewShift(3)
@@ -50,7 +50,7 @@ func NewCaesar() Cipher {
 
 // NewShift generates conversion maps for simple caesar cipher with specified shift.
 func NewShift(shift int) Cipher {
-	var c cipher
+	var c caesarCipher
 
 	abcLen := 'z' - 'a'
 	if shift == 0 || int32(shift) < (-abcLen) || int32(shift) > abcLen {
@@ -76,7 +76,24 @@ func NewShift(shift int) Cipher {
 	return c
 }
 
-func NewVigenere(k string) Cipher {
-	var c cipher
-	return c
+type vigenereCipher struct {
+	keyword string
+}
+
+// Encode encodes string using Vigenere cipher with encapsulated keyword
+func (c vigenereCipher) Encode(s string) string {
+	// todo
+	return s
+}
+
+// Encode decodes string using Vigenere cipher with encapsulated keyword
+func (c vigenereCipher) Decode(s string) string {
+	// todo
+	return s
+}
+
+// NewVigenere generates conversion maps for encoding text by using a series of interwoven Caesar ciphers,
+// based on the letters of a given keyword.
+func NewVigenere(keyword string) Cipher {
+	return vigenereCipher{keyword}
 }
