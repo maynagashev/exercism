@@ -21,7 +21,7 @@ func Frequency(s string) FreqMap {
 // ConcurrentFrequency counts the frequency of each rune in a given texts, running Frequency concurrently
 func ConcurrentFrequency(texts []string) FreqMap {
 
-	c := make(chan FreqMap, len(texts))
+	c := make(chan FreqMap, 2)
 
 	// executing goroutines
 	for _, t := range texts {
@@ -30,11 +30,11 @@ func ConcurrentFrequency(texts []string) FreqMap {
 		}(t)
 	}
 
-	// using first result as is (boost: speed 12%, allocations ~24%)
+	// using first result as is (boost: speed ~12%, allocations ~24%)
 	res := <-c
 
 	// collecting other results
-	for i := 1; i < len(texts); i++ {
+	for range texts[1:] {
 		for r, n := range <-c {
 			res[r] += n
 		}

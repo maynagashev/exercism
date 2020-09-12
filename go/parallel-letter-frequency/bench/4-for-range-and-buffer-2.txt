@@ -1,0 +1,13 @@
+=== RUN   TestConcurrentFrequency
+--- PASS: TestConcurrentFrequency (0.00s)
+=== RUN   TestSequentialFrequency
+--- PASS: TestSequentialFrequency (0.00s)
+goos: darwin
+goarch: amd64
+pkg: letter
+BenchmarkSequentialFrequency
+BenchmarkSequentialFrequency-12    	   56252	     20663 ns/op	    2995 B/op	      13 allocs/op
+BenchmarkConcurrentFrequency
+BenchmarkConcurrentFrequency-12    	   65559	     18229 ns/op	    6135 B/op	      34 allocs/op
+PASS
+ok  	letter	4.304s
