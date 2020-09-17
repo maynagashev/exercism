@@ -2,17 +2,18 @@ package main
 
 import (
 	"fmt"
-	"rsc.io/quote"
+	"tree-building"
 )
 
-//var input = []tree.Record{
-//	{ID: 0},
-//	{ID: 1, Parent: 0},
-//	{ID: 2, Parent: 0},
-//}
+var input = []tree.Record{
+	{ID: 0},
+	{ID: 1, Parent: 0},
+	{ID: 2, Parent: 0},
+}
 
 func main() {
+	a, _ := tree.Build(input)
 
-	fmt.Println(quote.Hello())
+	fmt.Printf("%#q", a)
 
 }
