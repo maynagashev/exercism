@@ -1,8 +1,9 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
-	"tree-building"
+	"local/exercism/tree-building"
 )
 
 var input = []tree.Record{
@@ -12,8 +13,19 @@ var input = []tree.Record{
 }
 
 func main() {
-	a, _ := tree.Build(input)
+	input, m := tree.Build(input)
+	fmt.Printf("%+v \t %+v \n", input, m)
+	fmt.Printf("%#v \t %#v \n", input, m)
+	PrettyPrint(input)
+	PrettyPrint(m)
+}
 
-	fmt.Printf("%#q", a)
-
+func PrettyPrint(data interface{}) {
+	var p []byte
+	p, err := json.MarshalIndent(data, "", "  ")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Printf("%s \n", p)
 }

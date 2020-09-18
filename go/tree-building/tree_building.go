@@ -16,7 +16,7 @@ type Node struct {
 }
 
 // Build builds tree of Node-s from slice of records
-func Build(records []Record) (*Node, error) {
+func Build(records []Record) (*Node, map[int]*Node) {
 	m := make(map[int]*Node, len(records))
 	var rootID int
 
@@ -33,11 +33,11 @@ func Build(records []Record) (*Node, error) {
 			rootID = r.ID
 		}
 
-		node := m[r.ID]
-		parent := m[r.Parent]
-
-		parent.Children = append(parent.Children, node)
+		//node := m[r.ID]
+		//parent := m[r.Parent]
+		//
+		////parent.Children = append(parent.Children, node)
 	}
 
-	return m[rootID], nil
+	return m[rootID], m
 }

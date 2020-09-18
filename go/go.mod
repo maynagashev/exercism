@@ -1,3 +1,3 @@
-module exercism
+module local/exercism
 
-go 1.14
+go 1.15
