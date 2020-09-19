@@ -1,0 +1,27 @@
+=== RUN   TestMakeTreeSuccess
+=== RUN   TestMakeTreeSuccess/empty_input
+=== RUN   TestMakeTreeSuccess/one_node
+=== RUN   TestMakeTreeSuccess/three_nodes_in_order
+=== RUN   TestMakeTreeSuccess/three_nodes_in_reverse_order
+=== RUN   TestMakeTreeSuccess/more_than_two_children
+=== RUN   TestMakeTreeSuccess/binary_tree
+=== RUN   TestMakeTreeSuccess/unbalanced_tree
+--- PASS: TestMakeTreeSuccess (0.00s)
+    --- PASS: TestMakeTreeSuccess/empty_input (0.00s)
+    --- PASS: TestMakeTreeSuccess/one_node (0.00s)
+    --- PASS: TestMakeTreeSuccess/three_nodes_in_order (0.00s)
+    --- PASS: TestMakeTreeSuccess/three_nodes_in_reverse_order (0.00s)
+    --- PASS: TestMakeTreeSuccess/more_than_two_children (0.00s)
+    --- PASS: TestMakeTreeSuccess/binary_tree (0.00s)
+    --- PASS: TestMakeTreeSuccess/unbalanced_tree (0.00s)
+goos: darwin
+goarch: amd64
+pkg: local/exercism/tree-building
+BenchmarkTwoTree
+BenchmarkTwoTree-12        	      74	  17308203 ns/op	 5390475 B/op	  131076 allocs/op
+BenchmarkTenTree
+BenchmarkTenTree-12        	     444	   2502444 ns/op	  887625 B/op	   15005 allocs/op
+BenchmarkShallowTree
+BenchmarkShallowTree-12    	     602	   1897541 ns/op	 1025914 B/op	   10025 allocs/op
+PASS
+ok  	local/exercism/tree-building	5.137s
