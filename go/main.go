@@ -13,11 +13,13 @@ var input = []tree.Record{
 }
 
 func main() {
-	input, m := tree.Build(input)
-	fmt.Printf("%+v \t %+v \n", input, m)
-	fmt.Printf("%#v \t %#v \n", input, m)
+	res, _ := tree.Build(input)
+	//fmt.Printf("%+v \t %+v \n", input, m)
+	//fmt.Printf("%#v \t %#v \n", input, m)
 	PrettyPrint(input)
-	PrettyPrint(m)
+	fmt.Println("==Result==")
+	PrettyPrint(res)
+	//PrettyPrint(m)
 }
 
 func PrettyPrint(data interface{}) {
