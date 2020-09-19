@@ -1,0 +1,45 @@
+=== RUN   TestMakeTreeSuccess
+=== RUN   TestMakeTreeSuccess/empty_input
+=== RUN   TestMakeTreeSuccess/one_node
+=== RUN   TestMakeTreeSuccess/three_nodes_in_order
+=== RUN   TestMakeTreeSuccess/three_nodes_in_reverse_order
+=== RUN   TestMakeTreeSuccess/more_than_two_children
+=== RUN   TestMakeTreeSuccess/binary_tree
+=== RUN   TestMakeTreeSuccess/unbalanced_tree
+--- PASS: TestMakeTreeSuccess (0.00s)
+    --- PASS: TestMakeTreeSuccess/empty_input (0.00s)
+    --- PASS: TestMakeTreeSuccess/one_node (0.00s)
+    --- PASS: TestMakeTreeSuccess/three_nodes_in_order (0.00s)
+    --- PASS: TestMakeTreeSuccess/three_nodes_in_reverse_order (0.00s)
+    --- PASS: TestMakeTreeSuccess/more_than_two_children (0.00s)
+    --- PASS: TestMakeTreeSuccess/binary_tree (0.00s)
+    --- PASS: TestMakeTreeSuccess/unbalanced_tree (0.00s)
+=== RUN   TestMakeTreeFailure
+=== RUN   TestMakeTreeFailure/root_node_has_parent
+=== RUN   TestMakeTreeFailure/no_root_node
+=== RUN   TestMakeTreeFailure/duplicate_node
+=== RUN   TestMakeTreeFailure/duplicate_root
+=== RUN   TestMakeTreeFailure/non-continuous
+=== RUN   TestMakeTreeFailure/cycle_directly
+=== RUN   TestMakeTreeFailure/cycle_indirectly
+=== RUN   TestMakeTreeFailure/higher_id_parent_of_lower_id
+--- PASS: TestMakeTreeFailure (0.00s)
+    --- PASS: TestMakeTreeFailure/root_node_has_parent (0.00s)
+    --- PASS: TestMakeTreeFailure/no_root_node (0.00s)
+    --- PASS: TestMakeTreeFailure/duplicate_node (0.00s)
+    --- PASS: TestMakeTreeFailure/duplicate_root (0.00s)
+    --- PASS: TestMakeTreeFailure/non-continuous (0.00s)
+    --- PASS: TestMakeTreeFailure/cycle_directly (0.00s)
+    --- PASS: TestMakeTreeFailure/cycle_indirectly (0.00s)
+    --- PASS: TestMakeTreeFailure/higher_id_parent_of_lower_id (0.00s)
+goos: darwin
+goarch: amd64
+pkg: local/exercism/tree-building
+BenchmarkTwoTree
+BenchmarkTwoTree-12        	      80	  14776130 ns/op	 5390450 B/op	  131076 allocs/op
+BenchmarkTenTree
+BenchmarkTenTree-12        	     658	   1933934 ns/op	  887618 B/op	   15005 allocs/op
+BenchmarkShallowTree
+BenchmarkShallowTree-12    	     799	   1518170 ns/op	 1025913 B/op	   10025 allocs/op
+PASS
+ok  	local/exercism/tree-building	4.820s

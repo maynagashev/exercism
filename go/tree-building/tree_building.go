@@ -20,22 +20,16 @@ type Node struct {
 	Children []*Node
 }
 
-// Build builds tree of Node-s from slice of records
+// Build builds tree of Node-s from slice of records.
+// Constraints:
+// - The ID number is always between 0 (inclusive) and the length of the record list (exclusive).
+// - All records have a parent ID lower than their own ID
+// - Root record has a parent ID that's equal to its own ID (root does not have to have an ID = 0).
 func Build(records []Record) (*Node, error) {
-	if len(records) == 0 {
-		return nil, nil
-	}
 
-	// making map of Node instances
 	m := make(map[int]*Node, len(records))
-	for _, r := range records {
-		if _, isAlreadyMapped := m[r.ID]; isAlreadyMapped {
-			return nil, errors.New("duplicated node id")
-		}
-		m[r.ID] = &Node{r.ID, nil}
-	}
 
-	// sorting, possible root will bubbled to the first position
+	// sorting, possible root will be bubbled to the first position
 	sort.Slice(records, func(i, j int) bool { return records[i].ID < records[j].ID })
 
 	rootID, lastID := -1, -1
@@ -52,13 +46,13 @@ func Build(records []Record) (*Node, error) {
 		if lastID != -1 && r.ID != lastID+1 {
 			return nil, errors.New("non-continuous")
 		}
-		node := m[r.ID]
-		parent, isParentExists := m[r.Parent]
-		if !isParentExists {
+		m[r.ID] = &Node{ID: r.ID}
+		parent, ok := m[r.Parent]
+		if !ok {
 			return nil, errors.New("invalid parent")
 		}
 		if r.ID != r.Parent {
-			parent.Children = append(parent.Children, node)
+			parent.Children = append(parent.Children, m[r.ID])
 		}
 		lastID = r.ID
 	}
