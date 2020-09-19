@@ -1,13 +1,11 @@
 /*
-Package tree contains Build method that implements logic for building tree structure from slice of records.
+Package tree contains Build method that implements logic for building tree structure from unordered slice of records.
 */
 package tree
 
 import (
 	"errors"
-	"fmt"
 	"sort"
-	"strconv"
 )
 
 // Record struct representing single record
@@ -24,51 +22,45 @@ type Node struct {
 
 // Build builds tree of Node-s from slice of records
 func Build(records []Record) (*Node, error) {
-	m := make(map[int]*Node, len(records))
-	rootID := -1
-
 	if len(records) == 0 {
 		return nil, nil
 	}
 
-	// making map
+	// making map of Node instances
+	m := make(map[int]*Node, len(records))
 	for _, r := range records {
 		if _, isAlreadyMapped := m[r.ID]; isAlreadyMapped {
 			return nil, errors.New("duplicated node id")
 		}
 		m[r.ID] = &Node{r.ID, nil}
-
 	}
 
-	// sorting
+	// sorting, possible root will bubbled to the first position
 	sort.Slice(records, func(i, j int) bool { return records[i].ID < records[j].ID })
 
-	// linking parents
-	for _, r := range records {
-		if r.ID == r.Parent {
+	rootID, lastID := -1, -1
+	for i, r := range records {
+		if i == 0 {
 			rootID = r.ID
 		}
-		if r.ID<r.Parent {
-			return nil, errors.New("parent younger than child, might be possible circular dependency")
+		if r.ID == r.Parent && r.ID != rootID {
+			return nil, errors.New("cycle directly")
 		}
-
+		if r.ID < r.Parent {
+			return nil, errors.New("higher id parent of lower id (possible indirect cycle)")
+		}
+		if lastID != -1 && r.ID != lastID+1 {
+			return nil, errors.New("non-continuous")
+		}
 		node := m[r.ID]
 		parent, isParentExists := m[r.Parent]
 		if !isParentExists {
 			return nil, errors.New("invalid parent")
 		}
-
 		if r.ID != r.Parent {
 			parent.Children = append(parent.Children, node)
 		}
+		lastID = r.ID
 	}
-	fmt.Printf("root=%s\n", strconv.Itoa(rootID))
-	fmt.Printf("map=%v\n", m)
-
-	root, ok := m[rootID]
-	if !ok {
-		return nil, errors.New("no root")
-	}
-
-	return root, nil
+	return m[rootID], nil
 }
