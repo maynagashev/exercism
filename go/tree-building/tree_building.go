@@ -3,6 +3,8 @@ Package tree contains Build method that implements logic for building tree struc
 */
 package tree
 
+import "sort"
+
 // Record struct representing single record
 type Record struct {
 	ID     int
@@ -23,10 +25,14 @@ func Build(records []Record) (*Node, error) {
 	if len(records) == 0 {
 		return nil, nil
 	}
+
 	// making map
 	for _, r := range records {
 		m[r.ID] = &Node{r.ID, nil}
 	}
+
+	// sorting
+	sort.Slice(records, func(i, j int) bool { return records[i].ID < records[j].ID })
 
 	// linking parents
 	for _, r := range records {
