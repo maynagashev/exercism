@@ -22,9 +22,9 @@ type Node struct {
 
 // Build builds tree of Node-s from slice of records.
 // Constraints:
-// - The ID number is always between 0 (inclusive) and the length of the record list (exclusive).
-// - All records have a parent ID lower than their own ID
-// - Root record has a parent ID that's equal to its own ID (root does not have to have an ID = 0).
+//    1. The ID number is always between 0 (inclusive) and the length of the record list (exclusive).
+//    2. All records have a parent ID lower than their own ID
+//    3. Root record has a parent ID that's equal to its own ID.
 func Build(records []Record) (*Node, error) {
 
 	m := make(map[int]*Node, len(records))
@@ -32,19 +32,10 @@ func Build(records []Record) (*Node, error) {
 	// sorting, possible root will be bubbled to the first position
 	sort.Slice(records, func(i, j int) bool { return records[i].ID < records[j].ID })
 
-	rootID, lastID := -1, -1
+	rootID := 0
 	for i, r := range records {
-		if i == 0 {
-			rootID = r.ID
-		}
-		if r.ID == r.Parent && r.ID != rootID {
-			return nil, errors.New("cycle directly")
-		}
-		if r.ID < r.Parent {
-			return nil, errors.New("higher id parent of lower id (possible indirect cycle)")
-		}
-		if lastID != -1 && r.ID != lastID+1 {
-			return nil, errors.New("non-continuous")
+		if r.ID != i || (r.ID == r.Parent && r.ID != rootID) || r.ID < r.Parent {
+			return nil, errors.New("invalid record")
 		}
 		m[r.ID] = &Node{ID: r.ID}
 		parent, ok := m[r.Parent]
@@ -54,7 +45,6 @@ func Build(records []Record) (*Node, error) {
 		if r.ID != r.Parent {
 			parent.Children = append(parent.Children, m[r.ID])
 		}
-		lastID = r.ID
 	}
 	return m[rootID], nil
 }
