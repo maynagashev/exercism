@@ -29,22 +29,16 @@ func Build(records []Record) (*Node, error) {
 
 	m := make(map[int]*Node, len(records))
 
-	// sorting, possible root will be bubbled to the first position
 	sort.Slice(records, func(i, j int) bool { return records[i].ID < records[j].ID })
 
-	rootID := 0
 	for i, r := range records {
-		if r.ID != i || (r.ID == r.Parent && r.ID != rootID) || r.ID < r.Parent {
+		if r.ID != i || (r.ID == r.Parent && r.ID != 0) || r.Parent > r.ID || r.Parent < 0 {
 			return nil, errors.New("invalid record")
 		}
 		m[r.ID] = &Node{ID: r.ID}
-		parent, ok := m[r.Parent]
-		if !ok {
-			return nil, errors.New("invalid parent")
-		}
 		if r.ID != r.Parent {
-			parent.Children = append(parent.Children, m[r.ID])
+			m[r.Parent].Children = append(m[r.Parent].Children, m[r.ID])
 		}
 	}
-	return m[rootID], nil
+	return m[0], nil
 }

@@ -9,7 +9,7 @@ import (
 var input = []tree.Record{
 	{ID: 0, Parent: 0},
 	{ID: 1, Parent: 0},
-	{ID: 1, Parent: 0},
+	{ID: 2, Parent: -1},
 }
 
 func main() {
