@@ -4,7 +4,7 @@ Package tree contains Build method that implements logic for building tree struc
 package tree
 
 import (
-	"errors"
+	"fmt"
 	"sort"
 )
 
@@ -32,8 +32,8 @@ func Build(records []Record) (*Node, error) {
 	sort.Slice(records, func(i, j int) bool { return records[i].ID < records[j].ID })
 
 	for i, r := range records {
-		if r.ID != i || (r.ID == r.Parent && r.ID != 0) || r.Parent > r.ID || r.Parent < 0 {
-			return nil, errors.New("invalid record")
+		if r.ID != i || (r.ID == r.Parent && r.ID != 0) || r.Parent > r.ID {
+			return nil, fmt.Errorf("bad record: %+v", r)
 		}
 		m[r.ID] = &Node{ID: r.ID}
 		if r.ID != r.Parent {
