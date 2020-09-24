@@ -23,7 +23,7 @@ func (r *Robot) Name() (string, error) {
 
 // Reset clears current name of Robot
 func (r Robot) Reset() {
-
+	r.name = ""
 }
 
 // newName generates new random name for Robot
