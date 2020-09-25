@@ -27,14 +27,16 @@ func (r Robot) Reset() {
 }
 
 // newName generates new random name for Robot
-func newName() (name string) {
+func newName() string {
 	rnd := rand.Intn(maxNameVariants)
-	rndDigit := rand.Intn(1000)
-	fmt.Println("newName() maxNameVariants: ", maxNameVariants, "rnd (full): ", rnd, (rnd+26)%rnd, "rndDigit:", rndDigit)
-	d1 := rndDigit/100 - rndDigit/100/10*10
-	d2 := rndDigit/10 - rndDigit/10/10*10
-	d3 := rndDigit - rndDigit/10*10
-	name = "AA" + string(rune('0'+d1)) + string(rune('0'+d2)) + string(rune('0'+d3))
-	fmt.Println(name)
+	fmt.Println("newName()", maxNameVariants, "rnd (full): ", rnd)
+	runes := make([]rune, 5)
+	runes[0] = rune('A' + rnd/1000/26%26)
+	runes[1] = rune('A' + rnd/1000%26)
+	runes[2] = rune('0' + rnd/100%10)
+	runes[3] = rune('0' + rnd/10%10)
+	runes[4] = rune('0' + rnd%10)
+	name := string(runes)
+	fmt.Println(runes, name)
 	return name
 }
