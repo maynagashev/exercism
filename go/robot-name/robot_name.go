@@ -1,6 +1,7 @@
 package robotname
 
 import (
+	"errors"
 	"fmt"
 	"math/rand"
 )
@@ -11,12 +12,15 @@ type Robot struct {
 }
 
 const maxNameVariants = 26 * 26 * 10 * 10 * 10
+var m = make(map[int]bool)
 
 // Name returns current Robot name
 // If name is empty, then will be generated new name
 func (r *Robot) Name() (string, error) {
 	if r.name == "" {
-		r.name = newName()
+		var err error
+		r.name, err = newName()
+		return r.name, err
 	}
 	return r.name, nil
 }
@@ -27,16 +31,21 @@ func (r Robot) Reset() {
 }
 
 // newName generates new random name for Robot
-func newName() string {
-	rnd := rand.Intn(maxNameVariants)
-	fmt.Println("newName()", maxNameVariants, "rnd (full): ", rnd)
-	runes := make([]rune, 5)
-	runes[0] = rune('A' + rnd/1000/26%26)
-	runes[1] = rune('A' + rnd/1000%26)
-	runes[2] = rune('0' + rnd/100%10)
-	runes[3] = rune('0' + rnd/10%10)
-	runes[4] = rune('0' + rnd%10)
-	name := string(runes)
-	fmt.Println(runes, name)
-	return name
+func newName() (string, error) {
+	for i := 0; i < maxNameVariants; i++ {
+		num := rand.Intn(maxNameVariants)
+		runes := make([]rune, 5)
+		runes[0] = rune('A' + num/1000/26%26)
+		runes[1] = rune('A' + num/1000%26)
+		runes[2] = rune('0' + num/100%10)
+		runes[3] = rune('0' + num/10%10)
+		runes[4] = rune('0' + num%10)
+		name := string(runes)
+		fmt.Println(num, "=", name, m)
+		if _, ok:= m[num]; !ok {
+			m[num] = true
+			return name, nil
+		}
+	}
+	return "", errors.New("all names occupied")
 }

@@ -19,7 +19,8 @@ func (r *Robot) getName(t testing.TB, expectSeen bool) string {
 	}
 	_, chk := seen[newName]
 	if !expectSeen && chk {
-		t.Fatalf("Name %s reissued after %d robots.", newName, len(seen))
+		t.Fatalf("Name %s reissued after %d robots. " +
+			"seen %v expectSeen %+v chk %+v newName=%+v seen[newName] %+v", newName, len(seen), seen, expectSeen, chk, newName, seen[newName])
 	}
 	seen[newName] = 0
 	return newName
