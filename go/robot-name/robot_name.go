@@ -2,7 +2,6 @@ package robotname
 
 import (
 	"errors"
-	"fmt"
 	"math/rand"
 )
 
@@ -12,21 +11,20 @@ type Robot struct {
 }
 
 const maxNameVariants = 26 * 26 * 10 * 10 * 10
-var m = make(map[int]bool)
+
+var generatedNumbers = make(map[int]bool)
 
 // Name returns current Robot name
 // If name is empty, then will be generated new name
-func (r *Robot) Name() (string, error) {
+func (r *Robot) Name() (name string, err error) {
 	if r.name == "" {
-		var err error
 		r.name, err = newName()
-		return r.name, err
 	}
-	return r.name, nil
+	return r.name, err
 }
 
 // Reset clears current name of Robot
-func (r Robot) Reset() {
+func (r *Robot) Reset() {
 	r.name = ""
 }
 
@@ -41,9 +39,8 @@ func newName() (string, error) {
 		runes[3] = rune('0' + num/10%10)
 		runes[4] = rune('0' + num%10)
 		name := string(runes)
-		fmt.Println(num, "=", name, m)
-		if _, ok:= m[num]; !ok {
-			m[num] = true
+		if _, ok := generatedNumbers[num]; !ok {
+			generatedNumbers[num] = true
 			return name, nil
 		}
 	}
