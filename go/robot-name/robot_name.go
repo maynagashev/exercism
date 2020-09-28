@@ -12,7 +12,7 @@ type Robot struct {
 
 const maxNameVariants = 26 * 26 * 10 * 10 * 10
 
-var generatedNumbers = make(map[int]bool)
+var generatedNames = make(map[string]bool)
 
 // Name returns current Robot name
 // If name is empty, then will be generated new name
@@ -39,8 +39,8 @@ func newName() (string, error) {
 		runes[3] = rune('0' + num/10%10)
 		runes[4] = rune('0' + num%10)
 		name := string(runes)
-		if _, ok := generatedNumbers[num]; !ok {
-			generatedNumbers[num] = true
+		if _, ok := generatedNames[name]; !ok {
+			generatedNames[name] = true
 			return name, nil
 		}
 	}
