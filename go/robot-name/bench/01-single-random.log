@@ -1,0 +1,15 @@
+=== RUN   TestNameValid
+--- PASS: TestNameValid (0.00s)
+=== RUN   TestNameSticks
+--- PASS: TestNameSticks (0.00s)
+=== RUN   TestSuccessiveRobotsHaveDifferentNames
+--- PASS: TestSuccessiveRobotsHaveDifferentNames (0.00s)
+=== RUN   TestResetName
+--- PASS: TestResetName (0.00s)
+goos: darwin
+goarch: amd64
+pkg: robotname
+BenchmarkName
+BenchmarkName-12    	       1	3007713805 ns/op	184517984 B/op	 9586785 allocs/op
+PASS
+ok  	robotname	4.574s

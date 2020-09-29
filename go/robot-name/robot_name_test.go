@@ -43,7 +43,7 @@ func TestResetName(t *testing.T) {
 // meaningful.  Bonus thought exercise, why won't it be meaningful?
 func BenchmarkName(b *testing.B) {
 	// Benchmark combined time to create robot and name.
-	n := 26*26*1000 - 6
+	n := 26*26*500
 	for i := 0; i < n; i++ {
 		New().getName(b, false)
 	}
