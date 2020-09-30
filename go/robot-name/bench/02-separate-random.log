@@ -8,10 +8,8 @@
 --- PASS: TestResetName (0.00s)
 goos: darwin
 goarch: amd64
-pkg: robotname
+pkg: local/exercism/robot-name
 BenchmarkName
-    common_test.go:18: Name() returned unexpected error: all names occupied
---- FAIL: BenchmarkName-12
-FAIL
-exit status 1
-FAIL	robotname	5.295s
+BenchmarkName-12               1        3844594094 ns/op        212145904 B/op  13261243 allocs/op
+PASS
+ok      local/exercism/robot-name       4.445s

@@ -8,8 +8,8 @@
 --- PASS: TestResetName (0.00s)
 goos: darwin
 goarch: amd64
-pkg: robotname
+pkg: local/exercism/robot-name
 BenchmarkName
-BenchmarkName-12    	       1	3007713805 ns/op	184517984 B/op	 9586785 allocs/op
+BenchmarkName-12               1        2637841824 ns/op        174213896 B/op   8304421 allocs/op
 PASS
-ok  	robotname	4.574s
+ok      local/exercism/robot-name       3.312s
