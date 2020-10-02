@@ -1,0 +1,52 @@
+Checked time of execution for the first and the last names:
+
+❯ go test -tags bonus
+iteration 0 took 31.909µs
+iteration 1 took 1.099µs
+iteration 2 took 690ns
+iteration 3 took 616ns
+iteration 4 took 617ns
+iteration 5 took 597ns
+iteration 6 took 600ns
+iteration 7 took 704ns
+iteration 8 took 1.82µs
+iteration 9 took 735ns
+iteration 675990 took 7.051489ms
+iteration 675991 took 88.274517ms
+iteration 675992 took 23.429351ms
+iteration 675993 took 77.209165ms
+iteration 675994 took 182.273µs
+iteration 675995 took 10.350265ms
+iteration 675996 took 13.31893ms
+iteration 675997 took 23.309531ms
+iteration 675998 took 1.801887ms
+iteration 675999 took 541.917828ms
+PASS
+ok      local/exercism/robot-name       5.072s
+
+
+With prefilled variants slice (permutation):
+
+❯ go test -tags bonus
+iteration 0 took 838ns
+iteration 1 took 644ns
+iteration 2 took 263ns
+iteration 3 took 244ns
+iteration 4 took 246ns
+iteration 5 took 227ns
+iteration 6 took 214ns
+iteration 7 took 235ns
+iteration 8 took 1.622µs
+iteration 9 took 368ns
+iteration 675990 took 551ns
+iteration 675991 took 491ns
+iteration 675992 took 445ns
+iteration 675993 took 467ns
+iteration 675994 took 383ns
+iteration 675995 took 486ns
+iteration 675996 took 617ns
+iteration 675997 took 413ns
+iteration 675998 took 314ns
+iteration 675999 took 509ns
+PASS
+ok      local/exercism/robot-name       0.965s
