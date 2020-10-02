@@ -5,9 +5,9 @@ import (
 	"math/rand"
 )
 
-// randomNameDisperse generates random name based on single random integer from in [0,maxNameVariants)
+// randomNameDisperse generates random name based on single random integer from in [0,max)
 func randomNameDisperse() string {
-	num := rand.Intn(maxNameVariants)
+	num := rand.Intn(max)
 	runes := make([]rune, 5)
 	runes[0] = rune('A' + num/1000/26%26)
 	runes[1] = rune('A' + num/1000%26)

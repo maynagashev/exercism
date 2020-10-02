@@ -3,9 +3,9 @@
 package robotname
 
 import (
+	"fmt"
 	"testing"
 	"time"
-	"fmt"
 )
 
 var maxNames = 26 * 26 * 10 * 10 * 10
@@ -22,7 +22,7 @@ func TestCollisions(t *testing.T) {
 	for i := len(seen); i < maxNames; i++ {
 		start := time.Now()
 		_ = New().getName(t, false)
-		if i > maxNames-10 || i<10{
+		if i > maxNames-10 || i < 10 {
 			fmt.Printf("iteration %d took %v\n", i, time.Since(start))
 		}
 	}
