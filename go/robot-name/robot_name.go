@@ -13,17 +13,10 @@ type Robot struct {
 
 const maxNameVariants = 26 * 26 * 10 * 10 * 10
 
-var variants []int
-var nextVariant int
+var generatedNames = make(map[string]bool)
 
 func init() {
-	Permutate()
-}
-
-// Permutate generates a pseudo-random permutation of the integers [0,maxNameVariants)
-func Permutate() {
 	rand.Seed(time.Now().UnixNano())
-	variants = rand.Perm(maxNameVariants)
 }
 
 // Name returns current Robot name
@@ -40,20 +33,17 @@ func (r *Robot) Reset() {
 	r.name = ""
 }
 
-// newName returns new random name for the Robot which not used before (with guarantee).
-// Uses prefilled variants slice of randomly permutated integers.
+// newName returns new random name for the Robot which not used before.
 func newName() (string, error) {
-	if nextVariant >= len(variants) {
-		return "", fmt.Errorf("generated %d names, no more variants available", nextVariant)
+	for len(generatedNames) < maxNameVariants {
+		r1 := rand.Intn(26) + 'A'
+		r2 := rand.Intn(26) + 'A'
+		num := rand.Intn(1000)
+		name := fmt.Sprintf("%c%c%03d", r1, r2, num)
+		if _, seen := generatedNames[name]; !seen {
+			generatedNames[name] = true
+			return name, nil
+		}
 	}
-	num := variants[nextVariant]
-	nextVariant++
-
-	runes := make([]rune, 5)
-	runes[0] = rune('A' + num/1000/26%26)
-	runes[1] = rune('A' + num/1000%26)
-	runes[2] = rune('0' + num/100%10)
-	runes[3] = rune('0' + num/10%10)
-	runes[4] = rune('0' + num%10)
-	return string(runes), nil
+	return "", fmt.Errorf("generated %d names, no more variants available", len(generatedNames))
 }

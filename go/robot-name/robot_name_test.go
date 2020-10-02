@@ -49,8 +49,8 @@ func BenchmarkName(b *testing.B) {
 	}
 }
 
-func BenchmarkPermutate(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		Permutate()
-	}
-}
+//func BenchmarkPermutate(b *testing.B) {
+//	for i := 0; i < b.N; i++ {
+//		Seed()
+//	}
+//}

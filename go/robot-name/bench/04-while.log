@@ -1,0 +1,18 @@
+❯ go test -v --bench . --benchmem && gofmt -d . && go vet && golint
+=== RUN   TestNameValid
+--- PASS: TestNameValid (0.00s)
+=== RUN   TestNameSticks
+--- PASS: TestNameSticks (0.00s)
+=== RUN   TestSuccessiveRobotsHaveDifferentNames
+--- PASS: TestSuccessiveRobotsHaveDifferentNames (0.00s)
+=== RUN   TestResetName
+--- PASS: TestResetName (0.00s)
+goos: darwin
+goarch: amd64
+pkg: local/exercism/robot-name
+BenchmarkName
+BenchmarkName-12                1000000000               0.162 ns/op           0 B/op          0 allocs/op
+BenchmarkPermutate
+BenchmarkPermutate-12             149857              7952 ns/op               0 B/op          0 allocs/op
+PASS
+ok      local/exercism/robot-name       2.873s
