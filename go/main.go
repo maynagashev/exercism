@@ -3,14 +3,21 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"local/exercism/robot-name"
+	"local/exercism/tournament"
+	"os"
+	"strings"
 )
 
 func main() {
-	r := robotname.Robot{}
-	r2 := robotname.Robot{}
-	fmt.Println(r.Name())
-	fmt.Println(r2.Name())
+	input := strings.NewReader(`
+Courageous Californians;Devastating Donkeys;win
+Allegoric Alaskians;Blithering Badgers;win
+Devastating Donkeys;Allegoric Alaskians;loss
+Courageous Californians;Blithering Badgers;win
+Blithering Badgers;Devastating Donkeys;draw
+Allegoric Alaskians;Courageous Californians;draw
+`)
+	tournament.Tally(input, os.Stdout)
 }
 
 func PrettyPrint(data interface{}) {
