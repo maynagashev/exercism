@@ -12,22 +12,42 @@ type tallyTable struct {
 }
 
 func newTallyTable(r io.Reader) (tallyTable, error) {
-	t := tallyTable{}
+	t := tallyTable{
+		map[string]int{},
+		map[string]int{},
+		map[string]int{},
+		map[string]int{},
+		map[string]int{},
+	}
 
 	scanner := bufio.NewScanner(r)
 	for scanner.Scan() {
 		row := scanner.Text()
 		f := strings.Split(row, ";")
 		fmt.Printf("%#v\n", f)
-		// switch f[2]
+		if len(f) < 3 {
+			continue
+		}
+		t.mp[f[0]]++
+		t.mp[f[1]]++
+		switch f[2] {
+		case "win":
+			t.w[f[0]]++
+			t.l[f[1]]++
+		case "loss":
+			t.l[f[0]]++
+			t.w[f[1]]++
+		case "draw":
+			t.d[f[0]]++
+			t.d[f[1]]++
+		}
 	}
-	t.w = map[string]int{"Allegoric Alaskians": 1, "Devastating Donkeys": 2}
 
 	return t, nil
 }
 
 func (t tallyTable) print(w io.Writer) (err error) {
-	
+
 	_, err = w.Write([]byte("Team                           | MP |  W |  D |  L |  P\n"))
 	if err != nil {
 		return err
