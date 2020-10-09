@@ -11,22 +11,7 @@ type tallyTable struct {
 	mp, w, d, l, p map[string]int
 }
 
-func (tallyTable) print(w io.Writer) {
-
-}
-
-// Tally writes to specified writer the number of points, goals, runs, etc. achieved in a game or by a team.
-func Tally(r io.Reader, w io.Writer) error {
-	parse(r).print(w)
-	return nil
-}
-
-func format(table tallyTable, w io.Writer) {
-	w.Write([]byte("Team                           | MP |  W |  D |  L |  P\n"))
-	w.Write([]byte(fmt.Sprintf("\nTable: %+v\n", table)))
-}
-
-func parse(r io.Reader) tallyTable {
+func newTallyTable(r io.Reader) (tallyTable, error) {
 	t := tallyTable{}
 
 	scanner := bufio.NewScanner(r)
@@ -34,8 +19,33 @@ func parse(r io.Reader) tallyTable {
 		row := scanner.Text()
 		f := strings.Split(row, ";")
 		fmt.Printf("%#v\n", f)
+		// switch f[2]
 	}
 	t.w = map[string]int{"Allegoric Alaskians": 1, "Devastating Donkeys": 2}
 
-	return t
+	return t, nil
+}
+
+func (t tallyTable) print(w io.Writer) (err error) {
+	
+	_, err = w.Write([]byte("Team                           | MP |  W |  D |  L |  P\n"))
+	if err != nil {
+		return err
+	}
+
+	_, err = w.Write([]byte(fmt.Sprintf("\nTable: %+v\n", t)))
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// Tally creates tallyTable struct from input and prints formatted results to output.
+func Tally(r io.Reader, w io.Writer) error {
+	tally, err := newTallyTable(r)
+	if err != nil {
+		return err
+	}
+	return tally.print(w)
 }
