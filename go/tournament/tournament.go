@@ -33,13 +33,17 @@ func newTallyTable(r io.Reader) (tallyTable, error) {
 		switch f[2] {
 		case "win":
 			t.w[f[0]]++
+			t.p[f[0]] += 3
 			t.l[f[1]]++
 		case "loss":
 			t.l[f[0]]++
 			t.w[f[1]]++
+			t.p[f[1]] += 3
 		case "draw":
 			t.d[f[0]]++
 			t.d[f[1]]++
+			t.p[f[0]] += 1
+			t.p[f[1]] += 1
 		}
 	}
 
@@ -53,6 +57,9 @@ func (t tallyTable) print(w io.Writer) (err error) {
 		return err
 	}
 
+	for _, team := range t.p {
+		
+	}
 	_, err = w.Write([]byte(fmt.Sprintf("\nTable: %+v\n", t)))
 	if err != nil {
 		return err
