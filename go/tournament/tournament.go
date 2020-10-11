@@ -4,11 +4,24 @@ import (
 	"bufio"
 	"fmt"
 	"io"
+	"sort"
 	"strings"
 )
 
 type tallyTable struct {
 	mp, w, d, l, p map[string]int
+}
+
+type sortedTeam struct {
+	name   string
+	points int
+}
+type sortedTeams []sortedTeam
+
+func (p sortedTeams) Len() int      { return len(p) }
+func (p sortedTeams) Swap(i, j int) { p[i], p[j] = p[j], p[i] }
+func (p sortedTeams) Less(i, j int) bool {
+	return p[i].points > p[j].points || (p[i].points == p[j].points && p[i].name > p[j].name)
 }
 
 func newTallyTable(r io.Reader) (tallyTable, error) {
@@ -24,7 +37,7 @@ func newTallyTable(r io.Reader) (tallyTable, error) {
 	for scanner.Scan() {
 		row := scanner.Text()
 		f := strings.Split(row, ";")
-		fmt.Printf("%#v\n", f)
+		//fmt.Printf("%#v\n", f)
 		if len(f) < 3 {
 			continue
 		}
@@ -52,20 +65,42 @@ func newTallyTable(r io.Reader) (tallyTable, error) {
 
 func (t tallyTable) print(w io.Writer) (err error) {
 
+	// head
 	_, err = w.Write([]byte("Team                           | MP |  W |  D |  L |  P\n"))
 	if err != nil {
 		return err
 	}
 
-	for _, team := range t.p {
-		
-	}
-	_, err = w.Write([]byte(fmt.Sprintf("\nTable: %+v\n", t)))
-	if err != nil {
-		return err
+	// body
+	for _, team := range t.sorted() {
+		name := team.name
+		w.Write([]byte(fmt.Sprintf("%s\t       |  %d |  %d |  %d |  %d |  %d\n",
+			name,
+			t.mp[name],
+			t.w[name],
+			t.d[name],
+			t.l[name],
+			t.p[name],
+		)))
+		if err != nil {
+			return err
+		}
 	}
 
+	// debug
+	//w.Write([]byte(fmt.Sprintf("\nDebug table: %+v\n", t)))
+
 	return nil
+}
+
+// sorted iterates through all participated teams (presented in "match played" map) and build slice for sort
+func (t tallyTable) sorted() sortedTeams {
+	slice := make(sortedTeams, 0, len(t.p))
+	for name, _ := range t.mp {
+		slice = append(slice, sortedTeam{name, t.p[name]})
+	}
+	sort.Sort(slice)
+	return slice
 }
 
 // Tally creates tallyTable struct from input and prints formatted results to output.
