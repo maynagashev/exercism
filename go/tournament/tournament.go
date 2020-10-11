@@ -24,6 +24,15 @@ func (p sortedTeams) Less(i, j int) bool {
 	return p[i].points > p[j].points || (p[i].points == p[j].points && p[i].name > p[j].name)
 }
 
+// Tally creates tallyTable struct from input and prints formatted results to output.
+func Tally(r io.Reader, w io.Writer) error {
+	tt, err := newTallyTable(r)
+	if err != nil {
+		return err
+	}
+	return tt.print(w)
+}
+
 func newTallyTable(r io.Reader) (tallyTable, error) {
 	t := tallyTable{
 		map[string]int{},
@@ -109,13 +118,4 @@ func (t tallyTable) sorted() sortedTeams {
 	}
 	sort.Sort(slice)
 	return slice
-}
-
-// Tally creates tallyTable struct from input and prints formatted results to output.
-func Tally(r io.Reader, w io.Writer) error {
-	tally, err := newTallyTable(r)
-	if err != nil {
-		return err
-	}
-	return tally.print(w)
 }
