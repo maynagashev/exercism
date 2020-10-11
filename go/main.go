@@ -10,14 +10,17 @@ import (
 
 func main() {
 	input := strings.NewReader(`
-Courageous Californians;Devastating Donkeys;win
+Courageous Californians;Devastating Donkeys
 Allegoric Alaskians;Blithering Badgers;win
 Devastating Donkeys;Allegoric Alaskians;loss
 Courageous Californians;Blithering Badgers;win
 Blithering Badgers;Devastating Donkeys;draw
 Allegoric Alaskians;Courageous Californians;draw
 `)
-	tournament.Tally(input, os.Stdout)
+	err := tournament.Tally(input, os.Stdout)
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 
 func PrettyPrint(data interface{}) {

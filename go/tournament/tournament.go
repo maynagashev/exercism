@@ -37,26 +37,34 @@ func newTallyTable(r io.Reader) (tallyTable, error) {
 	for scanner.Scan() {
 		row := scanner.Text()
 		f := strings.Split(row, ";")
-		//fmt.Printf("%#v\n", f)
-		if len(f) < 3 {
+
+		// validation
+		switch {
+		case strings.TrimSpace(row) == "": // skip empty rows
 			continue
+		case len(f) < 3:
+			return t, fmt.Errorf("Invalid row:\n%s", row)
+		case f[2] != "win" && f[2] != "loss" && f[2] != "draw":
+			return t, fmt.Errorf("Unrecongnized match result \"%s\" in a row:\n%s", f[2], row)
 		}
-		t.mp[f[0]]++
-		t.mp[f[1]]++
-		switch f[2] {
+
+		team1, team2, result := f[0], f[1], f[2]
+		t.mp[team1]++
+		t.mp[team2]++
+		switch result {
 		case "win":
-			t.w[f[0]]++
-			t.p[f[0]] += 3
-			t.l[f[1]]++
+			t.w[team1]++
+			t.l[team2]++
+			t.p[team1] += 3
 		case "loss":
-			t.l[f[0]]++
-			t.w[f[1]]++
-			t.p[f[1]] += 3
+			t.w[team2]++
+			t.l[team1]++
+			t.p[team2] += 3
 		case "draw":
-			t.d[f[0]]++
-			t.d[f[1]]++
-			t.p[f[0]] += 1
-			t.p[f[1]] += 1
+			t.d[team1]++
+			t.d[team2]++
+			t.p[team1] += 1
+			t.p[team2] += 1
 		}
 	}
 
