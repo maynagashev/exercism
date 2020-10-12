@@ -26,14 +26,15 @@ func (p sortedTeams) Less(i, j int) bool {
 
 // Tally creates tallyTable struct from input and prints formatted results to output.
 func Tally(r io.Reader, w io.Writer) error {
-	tt, err := newTallyTable(r)
+	tt, err := parse(r)
 	if err != nil {
 		return err
 	}
+	//w.Write([]byte(fmt.Sprintf("\nParsed tally table: %+v\n", tt)))
 	return tt.print(w)
 }
 
-func newTallyTable(r io.Reader) (tallyTable, error) {
+func parse(r io.Reader) (tallyTable, error) {
 	t := tallyTable{
 		map[string]int{},
 		map[string]int{},
@@ -104,13 +105,10 @@ func (t tallyTable) print(w io.Writer) (err error) {
 		}
 	}
 
-	// debug
-	//w.Write([]byte(fmt.Sprintf("\nDebug table: %+v\n", t)))
-
 	return nil
 }
 
-// sorted iterates through all participated teams (presented in "match played" map) and build slice for sort
+// sorted makes slice sortedTeams from participated teams (presented in "match played" map) and sorts it
 func (t tallyTable) sorted() sortedTeams {
 	slice := make(sortedTeams, 0, len(t.p))
 	for name, _ := range t.mp {

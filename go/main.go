@@ -10,7 +10,7 @@ import (
 
 func main() {
 	input := strings.NewReader(`
-Courageous Californians;Devastating Donkeys
+Courageous Californians;Devastating Donkeys;win
 Allegoric Alaskians;Blithering Badgers;win
 Devastating Donkeys;Allegoric Alaskians;loss
 Courageous Californians;Blithering Badgers;win
