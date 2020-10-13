@@ -21,7 +21,7 @@ type sortedTeams []sortedTeam
 func (p sortedTeams) Len() int      { return len(p) }
 func (p sortedTeams) Swap(i, j int) { p[i], p[j] = p[j], p[i] }
 func (p sortedTeams) Less(i, j int) bool {
-	return p[i].points > p[j].points || (p[i].points == p[j].points && p[i].name > p[j].name)
+	return p[i].points > p[j].points || (p[i].points == p[j].points && p[i].name < p[j].name)
 }
 
 // Tally creates tallyTable struct from input and prints formatted results to output.
@@ -75,8 +75,8 @@ func parse(r io.Reader) (tallyTable, error) {
 		case "draw":
 			t.d[team1]++
 			t.d[team2]++
-			t.p[team1] += 1
-			t.p[team2] += 1
+			t.p[team1]++
+			t.p[team2]++
 		}
 	}
 
@@ -111,10 +111,10 @@ func (t tallyTable) print(w io.Writer) (err error) {
 	return nil
 }
 
-// sorted makes slice sortedTeams from participated teams (presented in "match played" map) and sorts it
+// sorted sorts given tallyTable and returns sortedTeams slice of sortedTeam struct
 func (t tallyTable) sorted() sortedTeams {
 	slice := make(sortedTeams, 0, len(t.p))
-	for name, _ := range t.mp {
+	for name := range t.mp {
 		slice = append(slice, sortedTeam{name, t.p[name]})
 	}
 	sort.Sort(slice)
