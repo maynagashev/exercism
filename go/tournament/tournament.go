@@ -45,12 +45,14 @@ func parse(r io.Reader) (tallyTable, error) {
 
 	scanner := bufio.NewScanner(r)
 	for scanner.Scan() {
-		row := scanner.Text()
+		row := strings.TrimSpace(scanner.Text())
 		f := strings.Split(row, ";")
 
 		// validation
 		switch {
-		case strings.TrimSpace(row) == "": // skip empty rows
+		case row == "": // skip empty rows
+			continue
+		case row[0] == '#': // skip comments
 			continue
 		case len(f) < 3:
 			return t, fmt.Errorf("Invalid row:\n%s", row)
