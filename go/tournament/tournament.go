@@ -82,9 +82,10 @@ func parse(r io.Reader) (tallyTable, error) {
 }
 
 func (t tallyTable) print(w io.Writer) (err error) {
+	const format = "%-30v |%3v |%3v |%3v |%3v |%3v\n"
 
 	// head
-	_, err = w.Write([]byte("Team                           | MP |  W |  D |  L |  P\n"))
+	_, err = fmt.Fprintf(w, format, "Team", "MP", "W", "D", "L", "P")
 	if err != nil {
 		return err
 	}
@@ -92,14 +93,14 @@ func (t tallyTable) print(w io.Writer) (err error) {
 	// body
 	for _, team := range t.sorted() {
 		name := team.name
-		w.Write([]byte(fmt.Sprintf("%s\t       |  %d |  %d |  %d |  %d |  %d\n",
+		_, err := fmt.Fprintf(w, format,
 			name,
 			t.mp[name],
 			t.w[name],
 			t.d[name],
 			t.l[name],
 			t.p[name],
-		)))
+		)
 		if err != nil {
 			return err
 		}
