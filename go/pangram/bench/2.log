@@ -1,0 +1,7 @@
+goos: darwin
+goarch: amd64
+pkg: pangram
+BenchmarkPangram
+BenchmarkPangram-12       964057              1187 ns/op              96 B/op          2 allocs/op
+PASS
+ok      pangram 1.359s

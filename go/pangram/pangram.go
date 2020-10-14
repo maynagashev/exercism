@@ -14,11 +14,20 @@ import (
 
 // IsPangram determines if a sentence is a pangram.
 func IsPangram(s string) bool {
+	freq := [26]int{}
 	s = strings.ToLower(s)
-	for i := byte('a'); i <= byte('z'); i++ {
-		if strings.IndexByte(s, i) == -1 {
+	for _, c := range s {
+		i := c - 'a'
+		if i < 0 || i >= 26 {
+			continue
+		}
+		freq[i]++
+	}
+	for _, v := range freq {
+		if v == 0 {
 			return false
 		}
 	}
+
 	return true
 }
