@@ -12,6 +12,12 @@ type tallyTable struct {
 	mp, w, d, l, p map[string]int
 }
 
+type teamMap map[string]*team
+
+type team struct {
+	matches, wins, losses, draws, points int
+}
+
 type sortedTeam struct {
 	name   string
 	points int
