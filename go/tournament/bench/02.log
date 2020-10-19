@@ -1,0 +1,11 @@
+=== RUN   TestTallyHappy
+--- PASS: TestTallyHappy (0.00s)
+=== RUN   TestTallyError
+--- PASS: TestTallyError (0.00s)
+goos: darwin
+goarch: amd64
+pkg: local/exercism/tournament
+BenchmarkTally
+BenchmarkTally-12    	   50043	     23553 ns/op	   42628 B/op	     169 allocs/op
+PASS
+ok  	local/exercism/tournament	1.845s
