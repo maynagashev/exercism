@@ -8,14 +8,24 @@ import (
 	"strings"
 )
 
-type tallyTable struct {
-	mp, w, d, l, p map[string]int
-}
-
-type teamMap map[string]*team
-
 type team struct {
 	matches, wins, losses, draws, points int
+}
+
+func (t *team) won() {
+	t.matches++
+	t.wins++
+	t.points += 3
+}
+func (t *team) lost() {
+	t.matches++
+	t.losses++
+}
+
+func (t *team) drew() {
+	t.matches++
+	t.draws++
+	t.points++
 }
 
 type sortedTeam struct {
@@ -30,25 +40,37 @@ func (p sortedTeams) Less(i, j int) bool {
 	return p[i].points > p[j].points || (p[i].points == p[j].points && p[i].name < p[j].name)
 }
 
-// Tally creates tallyTable struct from input and prints formatted results to output.
-func Tally(r io.Reader, w io.Writer) error {
-	tt, err := parse(r)
+type teamMap map[string]*team
+
+func (teams teamMap) print(w io.Writer) (err error) {
+	const format = "%-30v |%3v |%3v |%3v |%3v |%3v\n"
+
+	_, err = fmt.Fprintf(w, format, "Team", "MP", "W", "D", "L", "P")
 	if err != nil {
 		return err
 	}
-	//w.Write([]byte(fmt.Sprintf("\nParsed tally table: %+v\n", tt)))
-	return tt.print(w)
-}
-
-func parse(r io.Reader) (tallyTable, error) {
-	t := tallyTable{
-		map[string]int{},
-		map[string]int{},
-		map[string]int{},
-		map[string]int{},
-		map[string]int{},
+	for _, s := range teams.sorted() {
+		t := teams[s.name]
+		_, err := fmt.Fprintf(w, format, s.name, t.matches, t.wins, t.draws, t.losses, t.points)
+		if err != nil {
+			return err
+		}
 	}
 
+	return nil
+}
+
+func (teams teamMap) sorted() sortedTeams {
+	slice := make(sortedTeams, 0, len(teams))
+	for name, team := range teams {
+		slice = append(slice, sortedTeam{name, team.points})
+	}
+	sort.Sort(slice)
+	return slice
+}
+
+func parse(r io.Reader) (teamMap, error) {
+	teams := teamMap{}
 	scanner := bufio.NewScanner(r)
 	for scanner.Scan() {
 		row := strings.TrimSpace(scanner.Text())
@@ -61,68 +83,40 @@ func parse(r io.Reader) (tallyTable, error) {
 		case row[0] == '#': // skip comments
 			continue
 		case len(f) < 3:
-			return t, fmt.Errorf("Invalid row:\n%s", row)
-		case f[2] != "win" && f[2] != "loss" && f[2] != "draw":
-			return t, fmt.Errorf("Unrecongnized match result \"%s\" in a row:\n%s", f[2], row)
+			return teams, fmt.Errorf("Invalid row:\n%s", row)
 		}
 
 		team1, team2, result := f[0], f[1], f[2]
-		t.mp[team1]++
-		t.mp[team2]++
+		if _, ok := teams[team1]; !ok {
+			teams[team1] = &team{}
+		}
+		if _, ok := teams[team2]; !ok {
+			teams[team2] = &team{}
+		}
+
 		switch result {
 		case "win":
-			t.w[team1]++
-			t.l[team2]++
-			t.p[team1] += 3
+			teams[team1].won()
+			teams[team2].lost()
 		case "loss":
-			t.w[team2]++
-			t.l[team1]++
-			t.p[team2] += 3
+			teams[team2].won()
+			teams[team1].lost()
 		case "draw":
-			t.d[team1]++
-			t.d[team2]++
-			t.p[team1]++
-			t.p[team2]++
+			teams[team1].drew()
+			teams[team2].drew()
+		default:
+			return teams, fmt.Errorf("Unrecongnized match result \"%s\" in a row:\n%s", result, row)
 		}
 	}
 
-	return t, nil
+	return teams, nil
 }
 
-func (t tallyTable) print(w io.Writer) (err error) {
-	const format = "%-30v |%3v |%3v |%3v |%3v |%3v\n"
-
-	// head
-	_, err = fmt.Fprintf(w, format, "Team", "MP", "W", "D", "L", "P")
+// Tally creates teams map with team structs
+func Tally(r io.Reader, w io.Writer) error {
+	teams, err := parse(r)
 	if err != nil {
 		return err
 	}
-
-	// body
-	for _, team := range t.sorted() {
-		name := team.name
-		_, err := fmt.Fprintf(w, format,
-			name,
-			t.mp[name],
-			t.w[name],
-			t.d[name],
-			t.l[name],
-			t.p[name],
-		)
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-// sorted sorts given tallyTable and returns sortedTeams slice of sortedTeam struct
-func (t tallyTable) sorted() sortedTeams {
-	slice := make(sortedTeams, 0, len(t.p))
-	for name := range t.mp {
-		slice = append(slice, sortedTeam{name, t.p[name]})
-	}
-	sort.Sort(slice)
-	return slice
+	return teams.print(w)
 }

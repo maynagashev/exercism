@@ -1,0 +1,19 @@
+=== RUN   TestPangram
+    pangram_test.go:12: PASS: sentence empty
+    pangram_test.go:12: PASS: recognizes a perfect lower case pangram
+    pangram_test.go:12: PASS: pangram with only lower case
+    pangram_test.go:12: PASS: missing character 'x'
+    pangram_test.go:12: PASS: another missing character, e.g. 'h'
+    pangram_test.go:12: PASS: pangram with underscores
+    pangram_test.go:12: PASS: pangram with numbers
+    pangram_test.go:12: PASS: missing letters replaced by numbers
+    pangram_test.go:12: PASS: pangram with mixed case and punctuation
+    pangram_test.go:12: PASS: upper and lower case versions of the same character should not be counted separately
+--- PASS: TestPangram (0.00s)
+goos: darwin
+goarch: amd64
+pkg: pangram
+BenchmarkPangram
+BenchmarkPangram-12    	 1074301	      1135 ns/op	      96 B/op	       2 allocs/op
+PASS
+ok  	pangram	2.401s
