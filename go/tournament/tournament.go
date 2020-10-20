@@ -12,20 +12,23 @@ type team struct {
 	matches, wins, losses, draws, points int
 }
 
-func (t *team) won() {
+func (t team) won() team {
 	t.matches++
 	t.wins++
 	t.points += 3
+	return t
 }
-func (t *team) lost() {
+func (t team) lost() team {
 	t.matches++
 	t.losses++
+	return t
 }
 
-func (t *team) drew() {
+func (t team) drew() team {
 	t.matches++
 	t.draws++
 	t.points++
+	return t
 }
 
 type sortedTeam struct {
@@ -40,7 +43,7 @@ func (p sortedTeams) Less(i, j int) bool {
 	return p[i].points > p[j].points || (p[i].points == p[j].points && p[i].name < p[j].name)
 }
 
-type teamMap map[string]*team
+type teamMap map[string]team
 
 func (teams teamMap) print(w io.Writer) (err error) {
 	const format = "%-30v |%3v |%3v |%3v |%3v |%3v\n"
@@ -87,23 +90,17 @@ func parse(r io.Reader) (teamMap, error) {
 		}
 
 		team1, team2, result := f[0], f[1], f[2]
-		if _, ok := teams[team1]; !ok {
-			teams[team1] = &team{}
-		}
-		if _, ok := teams[team2]; !ok {
-			teams[team2] = &team{}
-		}
 
 		switch result {
 		case "win":
-			teams[team1].won()
-			teams[team2].lost()
+			teams[team1] = teams[team1].won()
+			teams[team2] = teams[team2].lost()
 		case "loss":
-			teams[team2].won()
-			teams[team1].lost()
+			teams[team2] = teams[team2].won()
+			teams[team1] = teams[team1].lost()
 		case "draw":
-			teams[team1].drew()
-			teams[team2].drew()
+			teams[team1] = teams[team1].drew()
+			teams[team2] = teams[team2].drew()
 		default:
 			return teams, fmt.Errorf("Unrecongnized match result \"%s\" in a row:\n%s", result, row)
 		}
