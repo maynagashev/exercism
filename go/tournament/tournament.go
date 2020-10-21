@@ -11,21 +11,21 @@ import (
 type team struct {
 	matches, wins, losses, draws, points int
 }
-type teamMap map[string]team
+type TeamMap map[string]team
 
 type sortedTeam struct {
 	name   string
 	points int
 }
-type sortedTeams []sortedTeam
+type League []sortedTeam
 
-func (p sortedTeams) Len() int      { return len(p) }
-func (p sortedTeams) Swap(i, j int) { p[i], p[j] = p[j], p[i] }
-func (p sortedTeams) Less(i, j int) bool {
+func (p League) Len() int      { return len(p) }
+func (p League) Swap(i, j int) { p[i], p[j] = p[j], p[i] }
+func (p League) Less(i, j int) bool {
 	return p[i].points > p[j].points || (p[i].points == p[j].points && p[i].name < p[j].name)
 }
-func (teams teamMap) sorted() sortedTeams {
-	slice := make(sortedTeams, 0, len(teams))
+func LeagueFromTeams(teams TeamMap) League {
+	slice := make(League, 0, len(teams))
 	for name, team := range teams {
 		slice = append(slice, sortedTeam{name, team.points})
 	}
@@ -33,8 +33,8 @@ func (teams teamMap) sorted() sortedTeams {
 	return slice
 }
 
-func readMatchDataFrom(r io.Reader) (teamMap, error) {
-	teams := teamMap{}
+func ReadMatchDataFrom(r io.Reader) (TeamMap, error) {
+	teams := TeamMap{}
 	scanner := bufio.NewScanner(r)
 	for scanner.Scan() {
 		row := strings.TrimSpace(scanner.Text())
@@ -79,14 +79,14 @@ func readMatchDataFrom(r io.Reader) (teamMap, error) {
 	return teams, nil
 }
 
-func writeLeagueTableTo(w io.Writer, teams teamMap) (err error) {
+func WriteLeagueTableTo(w io.Writer, league League) (err error) {
 	const format = "%-30v |%3v |%3v |%3v |%3v |%3v\n"
 
 	_, err = fmt.Fprintf(w, format, "Team", "MP", "W", "D", "L", "P")
 	if err != nil {
 		return err
 	}
-	for _, s := range teams.sorted() {
+	for _, s := range league {
 		t := teams[s.name]
 		_, err := fmt.Fprintf(w, format, s.name, t.matches, t.wins, t.draws, t.losses, t.points)
 		if err != nil {
@@ -99,9 +99,10 @@ func writeLeagueTableTo(w io.Writer, teams teamMap) (err error) {
 
 // Tally creates teams map with team structs
 func Tally(r io.Reader, w io.Writer) error {
-	teams, err := readMatchDataFrom(r)
+	teams, err := ReadMatchDataFrom(r)
 	if err != nil {
 		return err
 	}
-	return writeLeagueTableTo(w, teams)
+	league := LeagueFromTeams(teams)
+	return WriteLeagueTableTo(w, league)
 }
