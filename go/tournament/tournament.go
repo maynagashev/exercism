@@ -51,7 +51,7 @@ func ReadMatchDataFrom(r io.Reader) (TeamMap, error) {
 		case row[0] == '#': // skip comments
 			continue
 		case len(f) < 3:
-			return teams, fmt.Errorf("Invalid row:\n%s", row)
+			return nil, fmt.Errorf("Invalid row:\n%s", row)
 		}
 
 		name1, name2, result := f[0], f[1], f[2]
