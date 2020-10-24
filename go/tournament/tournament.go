@@ -20,19 +20,15 @@ type TeamMap map[string]Team
 // League is sorted slice of teams
 type League []Team
 
-func (p League) Len() int      { return len(p) }
-func (p League) Swap(i, j int) { p[i], p[j] = p[j], p[i] }
-func (p League) Less(i, j int) bool {
-	return p[i].points > p[j].points || (p[i].points == p[j].points && p[i].name < p[j].name)
-}
-
 // LeagueFromTeams converts TeamMap to sorted slice League
 func LeagueFromTeams(teams TeamMap) League {
 	league := make(League, 0, len(teams))
 	for _, team := range teams {
 		league = append(league, team)
 	}
-	sort.Sort(league)
+	sort.Slice(league, func(i, j int) bool {
+		return league[i].points > league[j].points || (league[i].points == league[j].points && league[i].name < league[j].name)
+	})
 	return league
 }
 
