@@ -6,6 +6,6 @@ goos: darwin
 goarch: amd64
 pkg: local/exercism/tournament
 BenchmarkTally
-BenchmarkTally-12    	   49952	     23214 ns/op	   43540 B/op	     148 allocs/op
+BenchmarkTally-12    	   50496	     24515 ns/op	   43988 B/op	     156 allocs/op
 PASS
-ok  	local/exercism/tournament	1.587s
+ok  	local/exercism/tournament	3.143s
