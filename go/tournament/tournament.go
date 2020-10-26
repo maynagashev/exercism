@@ -14,45 +14,24 @@ type Team struct {
 	matches, wins, losses, draws, points int
 }
 
-// TeamMap map of teams by names
-type TeamMap map[string]Team
-
-// League is sorted slice of teams
-type League []Team
-
-// LeagueFromTeams converts TeamMap to sorted slice League
-func LeagueFromTeams(teams TeamMap) League {
-	league := make(League, 0, len(teams))
-	for _, team := range teams {
-		league = append(league, team)
-	}
-	sort.Slice(league, func(i, j int) bool {
-		return league[i].points > league[j].points || (league[i].points == league[j].points && league[i].name < league[j].name)
-	})
-	return league
-}
-
 // ReadMatchDataFrom parses match data using team map
-func ReadMatchDataFrom(r io.Reader) (TeamMap, error) {
-	teams := TeamMap{}
+func ReadMatchDataFrom(r io.Reader) (map[string]Team, error) {
+	teamMap := map[string]Team{}
 	scanner := bufio.NewScanner(r)
 	for scanner.Scan() {
+		// parse row
 		row := strings.TrimSpace(scanner.Text())
-		f := strings.Split(row, ";")
-
-		// validation
-		switch {
-		case row == "": // skip empty rows
+		if row == "" || strings.HasPrefix(row, "#") {
 			continue
-		case row[0] == '#': // skip comments
-			continue
-		case len(f) < 3:
-			return nil, fmt.Errorf("Invalid row:\n%s", row)
 		}
+		parts := strings.Split(row, ";")
+		if len(parts) != 3 {
+			return nil, fmt.Errorf("bad line %q: expected 'teamA;teamB;result'", row)
+		}
+		name1, name2, result := parts[0], parts[1], parts[2]
 
-		name1, name2, result := f[0], f[1], f[2]
-
-		a, b := teams[name1], teams[name2]
+		// resolve both teams from a map, update attributes and write back to the map
+		a, b := teamMap[name1], teamMap[name2]
 		a.name, b.name = name1, name2
 		a.matches++
 		b.matches++
@@ -71,23 +50,23 @@ func ReadMatchDataFrom(r io.Reader) (TeamMap, error) {
 			b.draws++
 			b.points++
 		default:
-			return teams, fmt.Errorf("Unrecongnized match result \"%s\" in a row:\n%s", result, row)
+			return teamMap, fmt.Errorf("Unrecongnized match result \"%s\" in a row:\n%s", result, row)
 		}
-		teams[name1], teams[name2] = a, b
+		teamMap[name1], teamMap[name2] = a, b
 	}
 
-	return teams, nil
+	return teamMap, nil
 }
 
-// WriteLeagueTableTo prints teams from league as a table
-func WriteLeagueTableTo(w io.Writer, league League) (err error) {
+// WriteTeamsAsTableTo prints teams as a table in given order
+func WriteTeamsAsTableTo(w io.Writer, teams []Team) (err error) {
 	const format = "%-30v |%3v |%3v |%3v |%3v |%3v\n"
 
 	_, err = fmt.Fprintf(w, format, "Team", "MP", "W", "D", "L", "P")
 	if err != nil {
 		return err
 	}
-	for _, t := range league {
+	for _, t := range teams {
 		_, err := fmt.Fprintf(w, format, t.name, t.matches, t.wins, t.draws, t.losses, t.points)
 		if err != nil {
 			return err
@@ -97,12 +76,21 @@ func WriteLeagueTableTo(w io.Writer, league League) (err error) {
 	return nil
 }
 
-// Tally creates teams map with Team structs
+// Tally reads a file of match results and outputs statistics for each team as formatted table.
 func Tally(r io.Reader, w io.Writer) error {
-	teams, err := ReadMatchDataFrom(r)
+	teamMap, err := ReadMatchDataFrom(r)
 	if err != nil {
 		return err
 	}
-	league := LeagueFromTeams(teams)
-	return WriteLeagueTableTo(w, league)
+
+	//sorting
+	teams := make([]Team, 0, len(teamMap))
+	for _, team := range teamMap {
+		teams = append(teams, team)
+	}
+	sort.Slice(teams, func(i, j int) bool {
+		return teams[i].points > teams[j].points || (teams[i].points == teams[j].points && teams[i].name < teams[j].name)
+	})
+
+	return WriteTeamsAsTableTo(w, teams)
 }
