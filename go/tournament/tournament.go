@@ -89,7 +89,10 @@ func Tally(r io.Reader, w io.Writer) error {
 		teams = append(teams, team)
 	}
 	sort.Slice(teams, func(i, j int) bool {
-		return teams[i].points > teams[j].points || (teams[i].points == teams[j].points && teams[i].name < teams[j].name)
+		if teams[i].points == teams[j].points {
+			return teams[i].name < teams[j].name
+		}
+		return teams[i].points > teams[j].points
 	})
 
 	return WriteTeamsAsTableTo(w, teams)
