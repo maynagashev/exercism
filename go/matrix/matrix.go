@@ -6,8 +6,10 @@ import (
 	"strings"
 )
 
+// Matrix representation
 type Matrix [][]int
 
+// New constructs new matrix from string input
 func New(input string) (Matrix, error) {
 	rows := strings.Split(input, "\n")
 	m := make(Matrix, len(rows))
@@ -25,19 +27,40 @@ func New(input string) (Matrix, error) {
 	return m, m.validate()
 }
 
+// Cols makes copy of matrix and rotates it
 func (m Matrix) Cols() [][]int {
-	return [][]int{}
+	cols := make([][]int, len(m[0]))
+	for i := 0; i < len(cols); i++ {
+		cols[i] = make([]int, len(m))
+		for j := 0; j < len(cols[i]); j++ {
+			cols[i][j] = m[j][i]
+		}
+	}
+	return cols
 }
 
+// Rows makes copy of the matrix and returns as is
 func (m Matrix) Rows() [][]int {
-	return [][]int{}
+	rows := make([][]int, len(m))
+	for i := 0; i < len(rows); i++ {
+		rows[i] = make([]int, len(m[i]))
+		for j := 0; j < len(rows[i]); j++ {
+			rows[i][j] = m[i][j]
+		}
+	}
+	return rows
 }
 
-func (m Matrix) Set(r int, c int, val int) bool {
+// Set updates value in specified cell
+func (m Matrix) Set(r int, c int, val int) (ok bool) {
+	if r < 0 || c < 0 || r >= len(m) || c >= len(m[0]) {
+		return false
+	}
+	m[r][c] = val
 	return true
 }
 
-// validate checks if the "width" of all rows is the same
+// validate checks if the "width" of all rows in the matrix is the same
 func (m Matrix) validate() error {
 	width := len(m[0])
 	for _, row := range m {
