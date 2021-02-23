@@ -2,6 +2,7 @@ package erratum
 
 import "fmt"
 
+// Use opens a resource, calls Frob(input) on the resource and then closes that resource (in all cases).
 func Use(o ResourceOpener, input string) (err error) {
 	resource, err := o()
 	for err != nil {
