@@ -1,9 +1,12 @@
 package account
 
+import "sync"
+
 // Account is bank account entity
 type Account struct {
 	balance  int64
 	isClosed bool
+	mu       sync.Mutex
 }
 
 // Open creates new bank account
@@ -26,6 +29,10 @@ func (a *Account) Balance() (balance int64, ok bool) {
 
 // Deposit increments balance
 func (a *Account) Deposit(amount int64) (newBalance int64, ok bool) {
+	// committing changes to balance is blocking op
+	a.mu.Lock()
+	defer a.mu.Unlock()
+
 	if a.isClosed {
 		return a.balance, false
 	}
@@ -39,8 +46,18 @@ func (a *Account) Deposit(amount int64) (newBalance int64, ok bool) {
 
 // Close closes account
 func (a *Account) Close() (payout int64, ok bool) {
+	// closing account is blocking op
+	a.mu.Lock()
+	defer a.mu.Unlock()
+
+	if a.isClosed {
+		return a.balance, false
+	}
+
+	// closing and committing changes to balance
+	a.isClosed = true
 	payout = a.balance
 	a.balance = 0
-	a.isClosed = true
+
 	return payout, true
 }
