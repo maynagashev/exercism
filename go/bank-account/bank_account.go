@@ -21,6 +21,10 @@ func Open(initialDeposit int64) *Account {
 
 // Balance returns current state of account
 func (a *Account) Balance() (balance int64, ok bool) {
+	// make sure that the balance is not changing at the moment
+	a.mu.Lock()
+	defer a.mu.Unlock()
+
 	if a.isClosed {
 		return a.balance, false
 	}
