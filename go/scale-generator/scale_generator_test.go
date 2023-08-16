@@ -6,6 +6,9 @@ import (
 )
 
 func TestScale(t *testing.T) {
+	var sum int
+	var q string
+
 	for _, test := range scaleTestCases {
 		actual := Scale(test.tonic, test.interval)
 		if fmt.Sprintf("%q", actual) != fmt.Sprintf("%q", test.expected) {
