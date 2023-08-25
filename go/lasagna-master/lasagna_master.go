@@ -20,14 +20,14 @@ func Quantities(layers []string) (noodles int, sauce float64) {
 	return
 }
 
-func AddSecretIngredient(layers []string) []string {
-	return append(layers, "secret ingredient")
+func AddSecretIngredient(friendsList []string, myList []string) {
+	myList[len(myList)-1] = friendsList[len(friendsList)-1]
 }
 
-func ScaleRecipe(quantities []float64, portionSize float64) []float64 {
+func ScaleRecipe(quantities []float64, portions int) []float64 {
 	res := make([]float64, len(quantities))
 	for i, v := range quantities {
-		res[i] = v * portionSize
+		res[i] = v * float64(portions) / 2
 	}
 	return res
 }
