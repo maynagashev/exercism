@@ -8,6 +8,10 @@ import (
 	"strings"
 )
 
+var str = `This is a raw string literal.
+It can contain special characters such as \n, \t, ", ', and even ` + "`" + ` backticks.
+It doesn't interpret escape sequences.`
+
 func main() {
 	input := strings.NewReader(`
 Courageous Californians;Devastating Donkeys;win
