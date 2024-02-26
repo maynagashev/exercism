@@ -26,6 +26,7 @@ func CanQueenAttack(whitePosition, blackPosition string) (bool, error) {
 	// Check for attack possibilities
 	sameRank := whiteRank == blackRank
 	sameFile := whiteFile == blackFile
+	// Angle between the two points is 45 degrees if the difference in the x and y coordinates is the same
 	sameDiagonal := math.Abs(float64(whiteFile-blackFile)) == math.Abs(float64(whiteRank-blackRank))
 
 	return sameRank || sameFile || sameDiagonal, nil
