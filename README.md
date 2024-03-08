@@ -7,6 +7,6 @@ Profile: https://exercism.org/profiles/evgendev
 ## Usage
 
 Format, lint, test & run benchmarks:
-```shell script
+```bash script
 gofmt -d . && go vet && golint && go test -v  --bench . --benchmem 
 ```
