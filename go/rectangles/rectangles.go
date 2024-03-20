@@ -82,7 +82,8 @@ func validateRectangle(upperLeft Point, bottomRight Point, diagram []string) boo
 		return false
 	}
 
-	return true
+	return trueexercism download --track=go --exercise=grade-school
+
 }
 
 func isVertical(u uint8) bool {
