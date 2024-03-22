@@ -1,4 +1,4 @@
-# Grade School
+``# Grade School
 
 Welcome to Grade School on Exercism's Go Track.
 If you need help running the tests or submitting your code, check out `HELP.md`.
@@ -48,4 +48,4 @@ In fact, when a test attempts to add the same student more than once, your imple
 
 ### Based on
 
-A pairing session with Phil Battos at gSchool
+A pairing session with Phil Battos at gSchool``
