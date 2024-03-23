@@ -37,8 +37,6 @@ func (s *School) Add(student string, grade int) {
 	gradePtr.students = append(gradePtr.students, student)
 
 	sort.Strings(gradePtr.students)
-
-	//fmt.Printf("students: %v \ns.grades: %v\n", gradePtr.students, s.Grade(grade))
 }
 
 func (s *School) Grade(level int) []string {
