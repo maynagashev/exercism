@@ -1,3 +1,11 @@
+// Package ledger Description: This package provides a function to format a ledger for a bank account.
+// Before:
+// goos: darwin
+// goarch: amd64
+// pkg: ledger
+// cpu: Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz
+// BenchmarkFormatLedger-12           19683             57479 ns/op            8400 B/op        248 allocs/op
+// PASS
 package ledger
 
 import (
@@ -6,22 +14,28 @@ import (
 	"strings"
 )
 
+// Entry represents a single entry in a ledger
 type Entry struct {
 	Date        string // "Y-m-d"
 	Description string
 	Change      int // in cents
 }
 
+// FormatLedger formats a ledger for a bank account
 func FormatLedger(currency string, locale string, entries []Entry) (string, error) {
+
+	if len(entries) == 0 {
+		_, err := FormatLedger(currency, "en-US", []Entry{{Date: "2014-01-01"}})
+		if err != nil {
+			return "", err
+		}
+	}
+
 	var entriesCopy []Entry
 	for _, e := range entries {
 		entriesCopy = append(entriesCopy, e)
 	}
-	if len(entries) == 0 {
-		if _, err := FormatLedger(currency, "en-US", []Entry{{Date: "2014-01-01", Description: "", Change: 0}}); err != nil {
-			return "", err
-		}
-	}
+
 	m1 := map[bool]int{true: 0, false: 1}
 	m2 := map[bool]int{true: -1, false: 1}
 	es := entriesCopy
@@ -58,8 +72,9 @@ func FormatLedger(currency string, locale string, entries []Entry) (string, erro
 			strings.Repeat(" ", 25-len("Description")) +
 			" | " + "Change" + "\n"
 	} else {
-		return "", errors.New("")
+		return "", errors.New("unsupported locale")
 	}
+
 	// Parallelism, always a great idea
 	co := make(chan struct {
 		i int
@@ -67,6 +82,7 @@ func FormatLedger(currency string, locale string, entries []Entry) (string, erro
 		e error
 	})
 	for i, et := range entriesCopy {
+		// Run the function in a goroutine
 		go func(i int, entry Entry) {
 			if len(entry.Date) != 10 {
 				co <- struct {
@@ -211,6 +227,7 @@ func FormatLedger(currency string, locale string, entries []Entry) (string, erro
 		}(i, et)
 	}
 	ss := make([]string, len(entriesCopy))
+
 	for range entriesCopy {
 		v := <-co
 		if v.e != nil {
@@ -221,5 +238,6 @@ func FormatLedger(currency string, locale string, entries []Entry) (string, erro
 	for i := 0; i < len(entriesCopy); i++ {
 		s += ss[i]
 	}
+	//fmt.Printf(s)
 	return s, nil
 }
